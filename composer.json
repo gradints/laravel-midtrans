@@ -1,0 +1,16 @@
+{
+    "name": "gradints/laravel-midtrans",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Gradints\\LaravelMidtrans\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Gradin Tech Solution"
+        }
+    ],
+    "minimum-stability": "stable"
+}
