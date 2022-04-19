@@ -1,7 +1,24 @@
 {
     "name": "gradints/laravel-midtrans",
+    "description": "Integrate Midtrans payment gateway to Laravel project.",
+    "keywords": [
+        "midtrans",
+        "laravel",
+        "payment-gateway"
+    ],
     "type": "library",
     "license": "MIT",
+    "homepage": "https://github.com/spatie/laravel-google-calendar",
+    "authors": [
+        {
+            "name": "Christhofer",
+            "email": "christhofer@gradin.co.id"
+        },
+        {
+            "name": "Rizky",
+            "email": "rizky@gradin.co.id"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "Gradints\\LaravelMidtrans\\": "src/"
@@ -12,13 +29,25 @@
             "Tests\\": "tests/"
         }
     },
-    "authors": [
-        {
-            "name": "Gradin Tech Solution"
-        }
-    ],
     "minimum-stability": "stable",
     "require-dev": {
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.5",
+        "orchestra/testbench": "^7.4"
+    },
+    "require": {
+        "illuminate/support": "^9.8"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Gradints\\LaravelMidtrans\\MidtransServiceProvider"
+            ],
+            "aliases": {
+                "Midtrans": "Gradints\\LaravelMidtrans\\MidtransFacade"
+            }
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
     }
 }

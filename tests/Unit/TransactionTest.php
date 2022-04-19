@@ -3,16 +3,12 @@
 namespace Tests\Unit;
 
 use Gradints\LaravelMidtrans\Models\Transaction;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class TransactionTest extends TestCase
 {
-    /**
-     * Test getInvoiceNumber()
-     *
-     * @return void
-     */
-    public function testGetInvoiceNumber()
+    /** @test getter orderId */
+    public function test_it_provides_a_getter_for_order_id()
     {
         $orderId = 'TR/20220401/0001';
         $grossAmount = 100_000;
@@ -21,12 +17,8 @@ class TransactionTest extends TestCase
         $this->assertEquals('TR-20220401-0001', $transaction->getOrderId());
     }
 
-    /**
-     * Test GetGrossAmount()
-     *
-     * @return void
-     */
-    public function testGrossAmount()
+    /** @test getter grossAmount */
+    public function test_it_provides_a_getter_for_gross_amount()
     {
         $orderId = 'TR/20220401/0001';
         $grossAmount = 100_000;

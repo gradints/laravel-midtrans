@@ -3,16 +3,12 @@
 namespace Tests\unit;
 
 use Gradints\LaravelMidtrans\Models\Customer;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class CustomerTest extends TestCase
 {
-    /**
-     * Test get firstName
-     *
-     * @return void
-     */
-    public function testGetFirstName()
+    /** @test getter firstName */
+    public function test_it_provides_a_getter_for_first_name()
     {
         $email = 'johndoe@example.com';
         $name = 'John';
@@ -32,12 +28,8 @@ class CustomerTest extends TestCase
         $this->assertEquals('John Max Bob', $customer->getFirstName());
     }
 
-    /**
-     * Test get lastName
-     *
-     * @return void
-     */
-    public function testGetLastName()
+    /** @test getter lastName */
+    public function test_it_provides_a_getter_for_last_name()
     {
         $email = 'johndoe@example.com';
         $name = 'John';
@@ -57,12 +49,8 @@ class CustomerTest extends TestCase
         $this->assertEquals('Doe', $customer->getLastName());
     }
 
-    /**
-     * Test get email
-     *
-     * @return void
-     */
-    public function testGetEmail()
+    /** @test getter email */
+    public function test_it_provides_a_getter_for_email()
     {
         $email = 'johndoe@example.com';
         $name = 'John';
