@@ -7,10 +7,18 @@
             "Gradints\\LaravelMidtrans\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
     "authors": [
         {
             "name": "Gradin Tech Solution"
         }
     ],
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    }
 }
