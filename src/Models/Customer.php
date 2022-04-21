@@ -4,9 +4,12 @@ namespace Gradints\LaravelMidtrans\Models;
 
 class Customer
 {
+    private array $billingAddress = [];
+
     public function __construct(
         private string $name,
         private string $email,
+        private string $phone = '',
     ) {
     }
 
@@ -47,5 +50,49 @@ class Customer
     public function getEmail(): string
     {
         return $this->email;
+    }
+
+    /**
+     * Get user's phone.
+     *
+     * @return string
+     */
+    public function getPhone(): string
+    {
+        return $this->phone;
+    }
+
+    /**
+     * Set user's billing_address
+     * @set $billingAddress
+     */
+    public function setBillingAddress(array $billingAddress)
+    {
+        $this->billingAddress = $billingAddress;
+    }
+
+    /**
+     * Set user's billing_address
+     */
+    public function getBillingAddress(): array
+    {
+        return $this->billingAddress;
+    }
+
+    /**
+     * Set user's shipping_address
+     * @set $billingAddress
+     */
+    public function setShippingAddress(array $shippingAddress)
+    {
+        $this->shippingAddress = $shippingAddress;
+    }
+
+    /**
+     * Set user's shipping_address
+     */
+    public function getShippingAddress(): array
+    {
+        return $this->shippingAddress;
     }
 }

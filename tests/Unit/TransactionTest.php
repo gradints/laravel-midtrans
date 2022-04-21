@@ -26,4 +26,26 @@ class TransactionTest extends TestCase
 
         $this->assertEquals(100_000, $transaction->getGrossAmount());
     }
+
+    /** @test constructor and getter for Items */
+    public function test_it_provides_constructor_parameter_and_getter_for_items()
+    {
+        $orderId = 'TR/20220401/0001';
+        $grossAmount = 100_000;
+        $items = [
+            [
+                'id' => '1',
+                'price' => 100_000,
+                'name' => 'Pulsa Indosat Rp 100,000',
+            ],
+            [
+                'id' => '2',
+                'price' => 3_000,
+                'name' => 'Indomie Goreng',
+            ],
+        ];
+        $transaction = new Transaction($orderId, $grossAmount, $items);
+
+        $this->assertEquals($items, $transaction->getItems());
+    }
 }

@@ -14,6 +14,7 @@ class MidtransServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/midtrans.php', 'midtrans');
+        $this->loadRoutesFrom(__DIR__ . '/MidtransRoutes.php');
     }
 
     /**
@@ -25,6 +26,6 @@ class MidtransServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__ . '/../config/midtrans.php' => config_path('midtrans.php'),
-        ]);
+        ], 'config');
     }
 }

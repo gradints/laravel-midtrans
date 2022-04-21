@@ -1,4 +1,5 @@
 {
+    "version": "0.0.1",
     "name": "gradints/laravel-midtrans",
     "description": "Integrate Midtrans payment gateway to Laravel project.",
     "keywords": [
@@ -35,7 +36,8 @@
         "orchestra/testbench": "^7.4"
     },
     "require": {
-        "illuminate/support": "^9.8"
+        "illuminate/support": ">5",
+        "midtrans/midtrans-php": "^2"
     },
     "extra": {
         "laravel": {

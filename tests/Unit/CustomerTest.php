@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\unit;
+namespace Tests\Unit;
 
 use Gradints\LaravelMidtrans\Models\Customer;
 use Tests\TestCase;
@@ -57,5 +57,58 @@ class CustomerTest extends TestCase
         $customer = new Customer($name, $email);
 
         $this->assertEquals($email, $customer->getEmail());
+    }
+
+    /** @test getter phone */
+    public function test_it_provides_a_getter_for_phone()
+    {
+        $email = 'johndoe@example.com';
+        $name = 'John';
+        $phone = '+6281234567890';
+        $customer = new Customer($name, $email, $phone);
+
+        $this->assertEquals($phone, $customer->getPhone());
+    }
+
+    /** @test setter and getter billing_address */
+    public function test_it_provides_a_setter_and_getter_for_billing_address()
+    {
+        $email = 'johndoe@example.com';
+        $name = 'John';
+        $customer = new Customer($name, $email);
+
+        $billingAddress = [
+            'first_name' => 'TEST',
+            'last_name' => 'UTOMO',
+            'phone' => '081 2233 44-55',
+            'address' => 'Sudirman',
+            'city' => 'Jakarta',
+            'postal_code' => '12190',
+            'country_code' => 'IDN',
+        ];
+        $customer->setBillingAddress($billingAddress);
+
+        $this->assertEquals($billingAddress, $customer->getBillingAddress());
+    }
+
+    /** @test setter and getter shipping_address */
+    public function test_it_provides_a_setter_and_getter_for_shipping_address()
+    {
+        $email = 'johndoe@example.com';
+        $name = 'John';
+        $customer = new Customer($name, $email);
+
+        $shippingAddress = [
+            'first_name' => 'TEST',
+            'last_name' => 'UTOMO',
+            'phone' => '081 2233 44-55',
+            'address' => 'Sudirman',
+            'city' => 'Jakarta',
+            'postal_code' => '12190',
+            'country_code' => 'IDN',
+        ];
+        $customer->setShippingAddress($shippingAddress);
+
+        $this->assertEquals($shippingAddress, $customer->getShippingAddress());
     }
 }
