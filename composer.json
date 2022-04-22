@@ -36,7 +36,8 @@
         "orchestra/testbench": "^7.4"
     },
     "require": {
-        "illuminate/support": ">5",
+        "php": ">8.1",
+        "illuminate/support": ">9",
         "midtrans/midtrans-php": "^2"
     },
     "extra": {

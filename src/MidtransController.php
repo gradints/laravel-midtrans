@@ -2,6 +2,9 @@
 
 namespace Gradints\LaravelMidtrans;
 
+use Gradints\LaravelMidtrans\Traits\CallFunction;
+use Gradints\LaravelMidtrans\Validations\Requests\PayAccountNotificationRequest;
+use Gradints\LaravelMidtrans\Validations\Requests\PaymentNotificationRequest;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Config;
@@ -9,35 +12,36 @@ use Illuminate\Support\Facades\Config;
 class MidtransController extends Controller
 {
     use ValidatesRequests;
+    use CallFunction;
 
-    public function paymentNotification(MidtransTransactionNotificationRequest $request)
+    // Best Practices to Handle Notification
+    // https://api-docs.midtrans.com/?php#best-practices-to-handle-notification
+
+    // TODO ignore status_code other than 200
+
+    public function paymentNotification(PaymentNotificationRequest $request): void
     {
-        // Validate request authenticity (compare signature)
-        // If not authentic, throw error 422 invalid signature
-
         // Call external function
-        $paymentNotification = Config::get('midtrans.notification_actions.payment_notification');
-        if (count($paymentNotification)) {
-            [$class, $function] = $paymentNotification;
-            $class::$function($request->all());
-        }
+        $paymentNotification = MidtransGetTransactionStatus::getExternalFunction(
+            $request->transaction_status,
+            $request->fraud_status
+        );
+
+        self::callFunction($paymentNotification, $request->all());
     }
 
-    public function recurringNotification (MidtransTransactionNotificationRequest $request)
+    public function recurringNotification(PaymentNotificationRequest $request): void
     {
-        // Validate request authenticity (compare signature)
-        // If not authentic, throw error 422 invalid signature
-
         // Call external function
-        $recurringNotification = Config::get('midtrans.notification_actions.recurring_notification');
+        $recurringNotification = Config::get('midtrans.recurring_notification');
         if (count($recurringNotification)) {
             [$class, $function] = $recurringNotification;
             $class::$function($request->all());
         }
     }
 
-    // public function payAccountNotification (Request $request)
-    // {
-
-    // }
+    public function payAccountNotification(PayAccountNotificationRequest $request): void
+    {
+        // do something
+    }
 }

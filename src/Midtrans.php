@@ -52,7 +52,7 @@ class Midtrans
 
     public function getCallbackUrl(): string
     {
-        return Config::get('midtrans.midtrans.redirect.finish');
+        return Config::get('midtrans.redirect.finish');
     }
 
     public function getSnapPaymentMethods(): array

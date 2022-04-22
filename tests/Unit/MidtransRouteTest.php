@@ -6,7 +6,7 @@ use Tests\TestCase;
 
 class MidtransRouteTest extends TestCase
 {
-    public function test_it_provides_routes_for_midtrans_notification_by_default()
+    public function test_it_provides_routes_for_midtrans_notification()
     {
         $this->assertEquals('/midtrans/payment-notification', route('midtrans.payment-notification', [], false));
         $this->assertEquals('/midtrans/recurring-notification', route('midtrans.recurring-notification', [], false));

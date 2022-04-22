@@ -1,6 +1,7 @@
 <?php
 
 use Gradints\LaravelMidtrans\MidtransController;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(MidtransController::class)->group(function () {

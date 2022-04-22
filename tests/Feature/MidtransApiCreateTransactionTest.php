@@ -22,10 +22,11 @@ class MidtransApiCreateTransactionTest extends TestCase
             // 'permata_va_number' => '8562000087926752',
         ];
 
-        $this->partialMock(
+        $this->mock(
             'alias:' . MidtransApi::class,
             function (MockInterface $mock) use ($response) {
                 $mock->shouldReceive('charge')
+                    ->once()
                     ->andReturn((object)$response);
             }
         );

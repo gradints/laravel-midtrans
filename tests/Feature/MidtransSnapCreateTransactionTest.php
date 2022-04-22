@@ -11,7 +11,7 @@ class MidtransSnapCreateTransactionTest extends TestCase
 {
     protected function setConfigCallback($app)
     {
-        $app->config->set('midtrans.midtrans.redirect.finish', 'https://example.com/payment-done');
+        $app->config->set('midtrans.redirect.finish', 'https://example.com/payment-done');
     }
     protected function setConfigPaymentMethodSnap($app)
     {
@@ -29,10 +29,11 @@ class MidtransSnapCreateTransactionTest extends TestCase
     {
         $randomToken = '66e4fa55-fdac-4ef9-91b5-733b97d1b862';
         $redirectUrl = 'https://app.sandbox.midtrans.com/snap/v2/vtweb/66e4fa55-fdac-4ef9-91b5-733b97d1b86';
-        $this->partialMock(
-            'overload:' . MidtransSnap::class,
+        $this->mock(
+            'alias:' . MidtransSnap::class,
             function (MockInterface $mock) use ($randomToken, $redirectUrl) {
                 $mock->shouldReceive('createTransaction')
+                    ->once()
                     ->andReturn((object)[
                         'token' => $randomToken,
                         'redirect_url' => $redirectUrl,

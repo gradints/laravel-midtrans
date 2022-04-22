@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Gradints\LaravelMidtrans\Validations\Requests\PaymentNotificationRequest;
 use Illuminate\Support\Facades\Config;
 use Tests\TestCase;
 
@@ -13,12 +14,12 @@ class MidtransControllerTest extends TestCase
     }
     protected function setConfigCallback($app)
     {
-        $app->config->set('midtrans.notification_actions.payment_notification', [
-            'Gradints\LaravelMidtrans\Models\PurchaseClass', 
-            'updatePaymentStatus',
+        $app->config->set('midtrans.payment_notification.pending', [
+            'App\Models\Purchase',
+            'updatePaymentStatusPending',
         ]);
-        $app->config->set('midtrans.notification_actions.recurring_notification', [
-            'Gradints\LaravelMidtrans\Models\UserClass', 
+        $app->config->set('midtrans.recurring_notification', [
+            'Gradints\LaravelMidtrans\Models\UserClass',
             'updateMembershipStatus',
         ]);
     }
@@ -28,37 +29,27 @@ class MidtransControllerTest extends TestCase
      * @define-env setConfigCallback
      * @define-env setConfigServerKey
      */
-    public function it_provides_routes_to_receive_payment_notification_from_midtrans()
+    public function it_provides_routes_to_receive_payment_notification_from_midtrans_status_pending()
     {
-        $mock = $this->mock('alias:Gradints\LaravelMidtrans\Models\PurchaseClass');
-        $mock->shouldReceive('updatePaymentStatus');
-
-        $orderId = '1111';
-        $statusCode = '200';
-        $grossAmount = '100000';
-        $serverKey = 'askvnoibnosifnboseofinbofinfgbiufglnbfg';
-        $input = $orderId . $statusCode . $grossAmount . $serverKey;
-        $signature = openssl_digest($input, 'sha512');
-
         $request = [
-            'transaction_time' => now()->subMinutes(1),
-            'transaction_status' => 'settlement',
-            'transaction_id' => '513f1f01-c9da-474c-9fc9-d5c64364b709',
-            'status_message' => 'midtrans payment notification',
-            'status_code' => $statusCode,
-            'signature_key' => $signature,
-            'settlement_time' => now(),
-            'payment_type' => 'gopay',
-            'order_id' => $orderId,
-            'merchant_id' => 'G141532850',
-            'gross_amount' => $grossAmount,
+            'transaction_status' => 'pending',
             'fraud_status' => 'accept',
-            'currency' => 'IDR',
         ];
+        $this->partialMock(PaymentNotificationRequest::class, function ($mock) use ($request) {
+            $mock->shouldAllowMockingProtectedMethods();
+            $mock->shouldReceive('retrieveItem')->withArgs(['transaction_status'])->andReturn('pending');
+            $mock->shouldReceive('retrieveItem')->withArgs(['fraud_status'])->andReturn('accept');
+            $mock->shouldReceive('retrieveItem')->withAnyArgs()->andReturn('');
+            $mock->shouldReceive('getRealMethod')->withAnyArgs()->andReturn('');
+            $mock->shouldReceive('all')->withAnyArgs()->andReturn($request);
+        });
 
-        // $url = Config::get('midtrans.endpoints.payment_notification');
-        $url = '/midtrans/payment-notification';
-        $this->postJson($url, $request)->assertOk();
+        $this->mock('alias:App\Models\Purchase', function ($mock) {
+            $mock->shouldReceive('updatePaymentStatusPending')->once();
+        });
+
+        $url = route('midtrans.payment-notification');
+        $this->postJson($url, [])->assertOk();
     }
 
     /**

@@ -57,23 +57,26 @@ return [
      | When Midtrans send https post request to '/midtrans/payment-notification',
      | MidtransController will execute App\Models\Payment::setPaymentAsDone($response)
      |
+     | Function to run when Midtrans send HTTP Post request to payment notification route
      */
-    // 'notification_routes' => [
-        // Address where Midtrans will send the notification via HTTP Post request.
-        // 'payment_notification' => '/midtrans/payment-notification',
-        // Address where Midtrans will send the recurring notification via HTTP Post request.
-        // 'recurring_notification' => '/midtrans/recurring-notification',
-        // Address where Midtrans will send the pay account status notification via HTTP Post request
-        // 'pay_account_notification' => '/midtrans/recurring-notification',
-    // ],
-    'notification_actions' => [
-        // Function to run when Midtrans send HTTP Post request to payment notification route
-        'payment_notification' => ['App\Models\Purchase', 'updatePaymentStatus'],
-        // Function to run when Midtrans send HTTP Post request to recurring notification route
-        'recurring_notification' => ['App\Models\User', 'updateMembershipStatus'],
-        // Function to run when Midtrans send HTTP Post request to pay account notification route
-        'pay_account_notification' => '',
+    'payment_notification' => [
+        'pending' => ['App\Models\Purchase', 'updatePaymentStatusPending'],
+        'capture' => ['App\Models\Purchase', 'updatePaymentStatusAccepted'],
+        'settlement' => ['App\Models\Purchase', 'updatePaymentStatusAccepted'],
+        'cancel' => ['App\Models\Purchase', 'updatePaymentStatusCanceled'],
+        'deny' => ['App\Models\Purchase', 'updatePaymentStatusDenied'],
+        'expire' => ['App\Models\Purchase', 'updatePaymentStatusExpired'],
+        'failure' => ['App\Models\Purchase', 'updatePaymentStatusFailed'],
+        'authorize' => [],
+        'refund' => [],
+        'partial_refund' => [],
+        'chargeback' => [],
+        'partial_chargeback' => [],
     ],
+    // Function to run when Midtrans send HTTP Post request to recurring notification route
+    'recurring_notification' => ['App\Models\User', 'updateMembershipStatus'],
+    // Function to run when Midtrans send HTTP Post request to pay account notification route
+    'pay_account_notification' => '',
 
     /*
      |--------------------------------------------------------------------------

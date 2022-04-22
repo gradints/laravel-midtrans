@@ -9,7 +9,7 @@ class MidtransSnapRequestPayloadTest extends TestCase
 {
     protected function setConfigCallback($app)
     {
-        $app->config->set('midtrans.midtrans.redirect.finish', 'https://example.com/payment-done');
+        $app->config->set('midtrans.redirect.finish', 'https://example.com/payment-done');
     }
     protected function setConfigExpiry($app)
     {

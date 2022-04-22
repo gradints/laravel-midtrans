@@ -1,0 +1,34 @@
+
+// midtrans api
+$payload = [
+  'transaction_details' => ['order_id' => 'inv_19042022_01', 'gross_amount' => 20_000],
+  'custom_expiry' => ['duration' => 1, 'init' => 'day' // second, minute, hour, day],
+  'customer_details' => ['firstName' => 'John', 'lastName' => 'Doe', 'email' => 'johnDoe@example.com'],
+  
+  'payment_type' => 'bank_transfer',
+  // sisanya tergantung metode pembayaran contoh permata bank
+  'bank_transfer' => [
+    'bank' => 'permata',
+    // 'permata' => [
+    //  'recipient_name' => 'sudarsono' // optional
+    // ],
+  ],
+];
+
+// midtrans snap
+$payload = [
+  'transaction_details' => [
+    'order_id' => 'inv_19042022_01'
+    'gross_amount' => 20_000
+  ],
+  'expiry' => [
+    'duration' => 1,
+    'init' => 'day' // second, minute, hour, day
+  ],
+  'customer_details' => [
+    'firstName' => 'John',
+    'lastName' => 'Doe',
+    'email' => 'johnDoe@example.com'
+  ],
+  'enabled_payments' => ['permata_va']
+];
