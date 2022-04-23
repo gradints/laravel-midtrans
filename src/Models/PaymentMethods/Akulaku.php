@@ -2,23 +2,16 @@
 
 namespace Gradints\LaravelMidtrans\Models\PaymentMethods;
 
-use Gradints\LaravelMidtrans\Interface\HasApi;
-use Gradints\LaravelMidtrans\Interface\HasSnap;
 use Gradints\LaravelMidtrans\Models\PaymentMethod;
 
-class Akulaku extends PaymentMethod implements HasSnap, HasApi
+class Akulaku extends PaymentMethod
 {
-    public function getSnapName(): string
+    public function getPaymentType(): string
     {
         return 'akulaku';
     }
 
-    public function getApiPaymentType(): string
-    {
-        return 'akulaku';
-    }
-
-    public function getApiPaymentPayload(): array
+    public function getPaymentPayload(): array
     {
         return [];
     }

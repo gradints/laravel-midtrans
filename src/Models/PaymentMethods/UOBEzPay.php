@@ -4,17 +4,15 @@ namespace Gradints\LaravelMidtrans\Models\PaymentMethods;
 
 use Gradints\LaravelMidtrans\Models\PaymentMethod;
 
-class BCABank extends PaymentMethod
+class UOBEzPay extends PaymentMethod
 {
     public function getPaymentType(): string
     {
-        return 'bank_transfer';
+        return 'uob_ezpay';
     }
 
     public function getPaymentPayload(): array
     {
-        return [
-            'bank' => 'bca',
-        ];
+        return [];
     }
 }

@@ -8,29 +8,20 @@ use Tests\TestCase;
 class BrimoTest extends TestCase
 {
     /**
-     * @test getSnapName function should return 'bri_epay'.
-     */
-    public function it_provides_a_getter_for_snap_name()
-    {
-        $brimo = new Brimo();
-        $this->assertEquals('bri_epay', $brimo->getSnapName());
-    }
-
-    /**
-     * @test getApiPaymentType function should return 'bri_epay'.
+     * @test getPaymentType function should return 'bri_epay'.
      */
     public function it_provides_a_getter_for_api_payment_type()
     {
         $brimo = new Brimo();
-        $this->assertEquals('bri_epay', $brimo->getApiPaymentType());
+        $this->assertEquals('bri_epay', $brimo->getPaymentType());
     }
 
     /**
-     * @test getApiPaymentPayload function should return name of the bank.
+     * @test getPaymentPayload function should return name of the bank.
      */
     public function it_provides_a_getter_for_api_payment_payload()
     {
         $brimo = new Brimo();
-        $this->assertEquals([], $brimo->getApiPaymentPayload());
+        $this->assertEquals([], $brimo->getPaymentPayload());
     }
 }

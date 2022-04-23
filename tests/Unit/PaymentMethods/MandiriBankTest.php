@@ -8,25 +8,16 @@ use Tests\TestCase;
 class MandiriBankTest extends TestCase
 {
     /**
-     * @test getSnapName function should return 'echannel'.
-     */
-    public function it_provides_a_getter_for_snap_name()
-    {
-        $mandiri = new MandiriBank();
-        $this->assertEquals('echannel', $mandiri->getSnapName());
-    }
-
-    /**
-     * @test getApiPaymentType function should return 'echannel'.
+     * @test getPaymentType function should return 'echannel'.
      */
     public function it_provides_a_getter_for_api_payment_type()
     {
         $mandiri = new MandiriBank();
-        $this->assertEquals('echannel', $mandiri->getApiPaymentType());
+        $this->assertEquals('echannel', $mandiri->getPaymentType());
     }
 
     /**
-     * @test getApiPaymentPayload function should return name of the bank.
+     * @test getPaymentPayload function should return name of the bank.
      */
     public function it_provides_a_getter_for_api_payment_payload()
     {
@@ -34,7 +25,7 @@ class MandiriBankTest extends TestCase
         $this->assertEquals([
             'bill_info1' => 'Payment:',
             'bill_info2' => 'Online purchase',
-        ], $mandiri->getApiPaymentPayload());
+        ], $mandiri->getPaymentPayload());
 
         $billInfo1 = 'Gradin';
         $billInfo2 = 'gradin.co.id';
@@ -43,7 +34,7 @@ class MandiriBankTest extends TestCase
         $this->assertEquals([
             'bill_info1' => $billInfo1,
             'bill_info2' => $billInfo2,
-        ], $mandiri->getApiPaymentPayload());
+        ], $mandiri->getPaymentPayload());
 
         $mandiri->setBillInfo('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H');
         $this->assertEquals([
@@ -55,6 +46,6 @@ class MandiriBankTest extends TestCase
             'bill_info6' => 'F',
             'bill_info7' => 'G',
             'bill_info8' => 'H',
-        ], $mandiri->getApiPaymentPayload());
+        ], $mandiri->getPaymentPayload());
     }
 }

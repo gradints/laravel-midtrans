@@ -20,9 +20,9 @@ class MidtransApiRequestPayloadTest extends TestCase
     protected function setConfigPaymentMethodSnap($app)
     {
         $app->config->set('midtrans.payment_methods.snap', [
-            \Gradints\LaravelMidtrans\Models\PaymentMethods\PermataBank::class,
-            \Gradints\LaravelMidtrans\Models\PaymentMethods\BRIBank::class,
-            \Gradints\LaravelMidtrans\Models\PaymentMethods\Gopay::class,
+            'permata_va',
+            'bri_va',
+            'gopay',
         ]);
     }
 
@@ -74,8 +74,8 @@ class MidtransApiRequestPayloadTest extends TestCase
                 'duration' => 1,
                 'init' => 'day', // second, minute, hour, day],
             ],
-            'payment_type' => $permata->getApiPaymentType(),
-            $permata->getApiPaymentType() => $permata->getApiPaymentPayload(),
+            'payment_type' => $permata->getPaymentType(),
+            $permata->getPaymentType() => $permata->getPaymentPayload(),
         ];
         $this->assertEquals($expected, $requestPayload);
     }

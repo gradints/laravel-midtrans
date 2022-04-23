@@ -60,18 +60,18 @@ return [
      | Function to run when Midtrans send HTTP Post request to payment notification route
      */
     'payment_notification' => [
-        'pending' => ['App\Models\Purchase', 'updatePaymentStatusPending'],
-        'capture' => ['App\Models\Purchase', 'updatePaymentStatusAccepted'],
-        'settlement' => ['App\Models\Purchase', 'updatePaymentStatusAccepted'],
-        'cancel' => ['App\Models\Purchase', 'updatePaymentStatusCanceled'],
-        'deny' => ['App\Models\Purchase', 'updatePaymentStatusDenied'],
-        'expire' => ['App\Models\Purchase', 'updatePaymentStatusExpired'],
-        'failure' => ['App\Models\Purchase', 'updatePaymentStatusFailed'],
-        'authorize' => [],
-        'refund' => [],
-        'partial_refund' => [],
-        'chargeback' => [],
-        'partial_chargeback' => [],
+        'pending' => ['App\Models\Purchase', 'onPending'],
+        'capture' => ['App\Models\Purchase', 'onCapture'],
+        'settlement' => ['App\Models\Purchase', 'onSettlement'],
+        'cancel' => ['App\Models\Purchase', 'onCancel'],
+        'deny' => ['App\Models\Purchase', 'onDeny'],
+        'expire' => ['App\Models\Purchase', 'onExpire'],
+        'failure' => ['App\Models\Purchase', 'onFailure'],
+        'authorize' => ['App\Models\Purchase', 'onAuthorize'],
+        'refund' => ['App\Models\Purchase', 'onRefund'],
+        'partial_refund' => ['App\Models\Purchase', 'onPartialRefund'],
+        'chargeback' => ['App\Models\Purchase', 'onChargeback'],
+        'partial_chargeback' => ['App\Models\Purchase', 'onPartialChargeback'],
     ],
     // Function to run when Midtrans send HTTP Post request to recurring notification route
     'recurring_notification' => ['App\Models\User', 'updateMembershipStatus'],
@@ -80,25 +80,38 @@ return [
 
     /*
      |--------------------------------------------------------------------------
-     | Registering class payment method
+     | Specify payment methods available for SNAP
      |--------------------------------------------------------------------------
      |
      | TODO description
      |
      */
+    'enabled_payments' => [
+        'credit_card',
 
-    'payment_methods' => [
-        'snap' => [
-            // Gradints\LaravelMidtrans\Models\PaymentMethods\BCACreditCard::class
-            // Gradints\LaravelMidtrans\Models\PaymentMethods\MandiriCreditCard::class
-            // Gradints\LaravelMidtrans\Models\PaymentMethods\PermataCreditCard::class
-        ],
-        'api' => [
-            // Gradints\LaravelMidtrans\Models\PaymentMethods\PermataBank::class
-            // Gradints\LaravelMidtrans\Models\PaymentMethods\BCABank::class
-            // Gradints\LaravelMidtrans\Models\PaymentMethods\MandiriBank::class
-        ],
+        // Bank Transfer
+        'bca_va',
+        'bni_va',
+        'bri_va',
+        'permata_va',
+        'echannel', // Mandiri bill
+
+        // Internet Banking
+        'bca_klikbca',
+        'bca_klikpay',
+        'bri_epay', // brimo
+        'cimb_clicks',
+        'danamon_online',
+
+        // E-Money
+        'gopay',
+        'shopeepay',
+
+        // Cardless credit
+        'akulaku',
+
+        // Over the Counter
+        'alfamart',
+        'indomaret',
     ],
-
-
 ];

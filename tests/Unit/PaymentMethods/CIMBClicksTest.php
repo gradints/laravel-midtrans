@@ -19,25 +19,16 @@ class CIMBClicksTest extends TestCase
     }
 
     /**
-     * @test getSnapName function should return 'cimb_clicks'.
-     */
-    public function it_provides_a_getter_for_snap_name()
-    {
-        $cimb = new CIMBClicks();
-        $this->assertEquals('cimb_clicks', $cimb->getSnapName());
-    }
-
-    /**
-     * @test getApiPaymentType function should return 'cimb_clicks'.
+     * @test getPaymentType function should return 'cimb_clicks'.
      */
     public function it_provides_a_getter_for_api_payment_type()
     {
         $cimb = new CIMBClicks();
-        $this->assertEquals('cimb_clicks', $cimb->getApiPaymentType());
+        $this->assertEquals('cimb_clicks', $cimb->getPaymentType());
     }
 
     /**
-     * @test getApiPaymentPayload function should return name of the bank.
+     * @test getPaymentPayload function should return name of the bank.
      */
     public function it_provides_a_getter_for_api_payment_payload()
     {
@@ -47,6 +38,6 @@ class CIMBClicksTest extends TestCase
 
         $this->assertEquals([
             'description' => $description,
-        ], $cimb->getApiPaymentPayload());
+        ], $cimb->getPaymentPayload());
     }
 }

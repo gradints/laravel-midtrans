@@ -2,7 +2,6 @@
 
 namespace Gradints\LaravelMidtrans;
 
-use Gradints\LaravelMidtrans\Interface\HasApi;
 use Gradints\LaravelMidtrans\Models\Customer;
 use Gradints\LaravelMidtrans\Models\PaymentMethod;
 use Gradints\LaravelMidtrans\Models\Transaction;
@@ -57,11 +56,7 @@ class Midtrans
 
     public function getSnapPaymentMethods(): array
     {
-        $paymentMethods = config::get('midtrans.payment_methods.snap');
-
-        return array_map(function ($paymentMethod) {
-            return (new $paymentMethod())->getSnapName();
-        }, $paymentMethods);
+        return Config::get('midtrans.payment_methods.snap');
     }
 
     public function generateRequestPayloadForSnap(): array
@@ -96,10 +91,6 @@ class Midtrans
 
     public function generateRequestPayloadForApi(PaymentMethod $paymentMethod): array
     {
-        if (!$paymentMethod instanceof HasApi) {
-            return [];
-        }
-
         return [
             // set transaction_details, https://api-docs.midtrans.com/?php#transaction-details-object
             'transaction_details' => [
@@ -119,8 +110,8 @@ class Midtrans
                 'duration' => Config::get('midtrans.expiry.duration'),
                 'init' => Config::get('midtrans.expiry.duration_unit'),
             ],
-            'payment_type' => $paymentMethod->getApiPaymentType(),
-            $paymentMethod->getApiPaymentType() => $paymentMethod->getApiPaymentPayload(),
+            'payment_type' => $paymentMethod->getPaymentType(),
+            $paymentMethod->getPaymentType() => $paymentMethod->getPaymentPayload(),
         ];
     }
 

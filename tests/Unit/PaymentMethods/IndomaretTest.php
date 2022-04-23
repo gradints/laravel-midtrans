@@ -8,21 +8,12 @@ use Tests\TestCase;
 class IndomaretTest extends TestCase
 {
     /**
-     * @test getSnapName function should return 'indomaret'.
-     */
-    public function it_provides_a_getter_for_snap_name()
-    {
-        $indomaret = new Indomaret();
-        $this->assertEquals('indomaret', $indomaret->getSnapName());
-    } 
-
-    /**
-     * @test getApiPaymentType function should return 'indomaret'.
+     * @test getPaymentType function should return 'indomaret'.
      */
     public function it_provides_a_getter_for_api_payment_type()
     {
         $indomaret = new Indomaret();
-        $this->assertEquals('indomaret', $indomaret->getApiPaymentType());
+        $this->assertEquals('indomaret', $indomaret->getPaymentType());
     }
 
     /**
@@ -37,19 +28,19 @@ class IndomaretTest extends TestCase
     }
 
     /**
-     * @test getApiPaymentPayload function should return array.
+     * @test getPaymentPayload function should return array.
      */
     public function it_provides_a_getter_for_api_payment_payload()
     {
         $indomaret = new Indomaret();
         $this->assertEquals([
-            'store' => 'indomaret'
-        ], $indomaret->getApiPaymentPayload());
+            'store' => 'indomaret',
+        ], $indomaret->getPaymentPayload());
 
         $indomaret->setMessage('Tiket1 transaction');
         $this->assertEquals([
             'store' => 'indomaret',
             'message' => 'Tiket1 transaction',
-        ], $indomaret->getApiPaymentPayload());
+        ], $indomaret->getPaymentPayload());
     }
 }

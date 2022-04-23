@@ -20,25 +20,16 @@ class GopayTest extends TestCase
     }
 
     /**
-     * @test getSnapName function should return 'gopay'.
-     */
-    public function it_provides_a_getter_for_snap_name()
-    {
-        $gopay = new Gopay();
-        $this->assertEquals('gopay', $gopay->getSnapName());
-    }
-
-    /**
-     * @test getApiPaymentType function should return 'gopay'.
+     * @test getPaymentType function should return 'gopay'.
      */
     public function it_provides_a_getter_for_api_payment_type()
     {
         $gopay = new Gopay();
-        $this->assertEquals('gopay', $gopay->getApiPaymentType());
+        $this->assertEquals('gopay', $gopay->getPaymentType());
     }
 
     /**
-     * @test getApiPaymentPayload function should return Gopay object.
+     * @test getPaymentPayload function should return Gopay object.
      */
     public function it_provides_a_getter_for_api_payment_payload()
     {
@@ -46,6 +37,6 @@ class GopayTest extends TestCase
         $gopay->setEnableCallback(true);
         $this->assertEquals([
             'enable_callback' => true,
-        ], $gopay->getApiPaymentPayload());
+        ], $gopay->getPaymentPayload());
     }
 }

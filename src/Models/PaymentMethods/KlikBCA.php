@@ -2,11 +2,9 @@
 
 namespace Gradints\LaravelMidtrans\Models\PaymentMethods;
 
-use Gradints\LaravelMidtrans\Interface\HasApi;
-use Gradints\LaravelMidtrans\Interface\HasSnap;
 use Gradints\LaravelMidtrans\Models\PaymentMethod;
 
-class KlikBCA extends PaymentMethod implements HasApi, HasSnap
+class KlikBCA extends PaymentMethod
 {
     private string $userId;
     private string $description;
@@ -31,18 +29,14 @@ class KlikBCA extends PaymentMethod implements HasApi, HasSnap
         return $this->description;
     }
 
-    public function getSnapName(): string
+    public function getPaymentType(): string
     {
         return 'bca_klikbca';
     }
 
-    public function getApiPaymentType(): string
+    public function getPaymentPayload(): array
     {
-        return 'bca_klikbca';
-    }
-
-    public function getApiPaymentPayload(): array
-    {
+        // https://api-docs.midtrans.com/#klikbca
         return [
             'user_id' => $this->getUserId(),
             'description' => $this->getDescription(),

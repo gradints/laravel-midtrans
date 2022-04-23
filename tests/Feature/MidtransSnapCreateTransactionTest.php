@@ -16,7 +16,7 @@ class MidtransSnapCreateTransactionTest extends TestCase
     protected function setConfigPaymentMethodSnap($app)
     {
         $app->config->set('midtrans.payment_methods.snap', [
-            \Gradints\LaravelMidtrans\Models\PaymentMethods\PermataBank::class,
+            'permata_va',
         ]);
     }
 

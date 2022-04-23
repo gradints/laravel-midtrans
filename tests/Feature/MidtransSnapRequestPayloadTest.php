@@ -19,9 +19,9 @@ class MidtransSnapRequestPayloadTest extends TestCase
     protected function setConfigPaymentMethodSnap($app)
     {
         $app->config->set('midtrans.payment_methods.snap', [
-            \Gradints\LaravelMidtrans\Models\PaymentMethods\PermataBank::class,
-            \Gradints\LaravelMidtrans\Models\PaymentMethods\BRIBank::class,
-            \Gradints\LaravelMidtrans\Models\PaymentMethods\Gopay::class,
+            'permata_va',
+            'bri_va',
+            'gopay',
         ]);
     }
 

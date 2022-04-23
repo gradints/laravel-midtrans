@@ -2,17 +2,16 @@
 
 namespace Gradints\LaravelMidtrans\Models\PaymentMethods;
 
-use Gradints\LaravelMidtrans\Interface\HasApi;
 use Gradints\LaravelMidtrans\Models\PaymentMethod;
 
-class Kredivo extends PaymentMethod implements HasApi
+class Kredivo extends PaymentMethod
 {
-    public function getApiPaymentType(): string
+    public function getPaymentType(): string
     {
         return 'kredivo';
     }
 
-    public function getApiPaymentPayload(): array
+    public function getPaymentPayload(): array
     {
         return [];
     }

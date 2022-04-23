@@ -4,7 +4,6 @@ namespace Gradints\LaravelMidtrans;
 
 use Gradints\LaravelMidtrans\Enums\TransactionStatus;
 use Gradints\LaravelMidtrans\Traits\CallFunction;
-use Illuminate\Support\Facades\Config;
 
 class MidtransGetTransactionStatus
 {
@@ -22,7 +21,7 @@ class MidtransGetTransactionStatus
 
         // TODO throw InvalidRequestException
 
-        $externalFunction = self::getExternalFunction(
+        $externalFunction = self::getAction(
             $response->transaction_status,
             $response->fraud_status
         );
@@ -30,7 +29,7 @@ class MidtransGetTransactionStatus
         self::callFunction($externalFunction, $response);
     }
 
-    public static function getExternalFunction($transactionStatus, $fraudStatus = null)
+    public static function getAction($transactionStatus, $fraudStatus = null)
     {
         return TransactionStatus::from($transactionStatus)->getAction();
     }

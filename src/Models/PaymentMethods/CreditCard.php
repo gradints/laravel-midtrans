@@ -2,11 +2,9 @@
 
 namespace Gradints\LaravelMidtrans\Models\PaymentMethods;
 
-use Gradints\LaravelMidtrans\Interface\HasApi;
-use Gradints\LaravelMidtrans\Interface\HasSnap;
 use Gradints\LaravelMidtrans\Models\PaymentMethod;
 
-class CreditCard extends PaymentMethod implements HasSnap, HasApi
+class CreditCard extends PaymentMethod
 {
     private string $bank = '';
     private int $installmentTerm = 0;
@@ -78,18 +76,14 @@ class CreditCard extends PaymentMethod implements HasSnap, HasApi
         return $this->saveTokenId;
     }
 
-    public function getSnapName(): string
+    public function getPaymentType(): string
     {
         return 'credit_card';
     }
 
-    public function getApiPaymentType(): string
+    public function getPaymentPayload(): array
     {
-        return 'credit_card';
-    }
-
-    public function getApiPaymentPayload(): array
-    {
+        // https://api-docs.midtrans.com/#card-payment
         return array_filter([
             'token_id' => $this->tokenId,
             'bank' => $this->bank,
@@ -102,35 +96,4 @@ class CreditCard extends PaymentMethod implements HasSnap, HasApi
             // TODO low priority 'type' Used as preauthorization feature. Valid value: authorize.
         ]);
     }
-
-    // snap
-    // [
-    //     'transaction_details' => [
-    //         'order_id' => 'inv_19042022_01',
-    //         'gross_amount' => 20_000,
-    //     ],
-    //     'expiry' => [
-    //         'duration' => 1,
-    //         'init' => 'day' // second, minute, hour, day],
-    //     ]
-    //     'customer_details' => [
-    //         'firstName' => 'John',
-    //         'lastName' => 'Doe',
-    //         'email' => 'johnDoe@example.com'
-    //     ],
-    //     'enabled_payments' => ['credit_card'],
-    //     'callbacks' => [
-    //       'finish' => 'https://demo.midtrans.com'
-    //     ]
-    // ];
-
-    // Api nya??
-    // "credit_card": {
-    //     "token_id": "4811117d16c884-2cc7-4624-b0a8-10273b7f6cc8",
-    //     "bank": "bni",
-    //     "installment_term": 6,
-    //     "bins": ["4811", "5233"],
-    //     "type": "authorize",
-    //     "save_token_id": true
-    // }
 }

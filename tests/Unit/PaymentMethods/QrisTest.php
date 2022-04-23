@@ -8,23 +8,23 @@ use Tests\TestCase;
 class QrisTest extends TestCase
 {
     /**
-     * @test getApiPaymentType function should return 'qris'.
+     * @test getPaymentType function should return 'qris'.
      */
     public function it_provides_a_getter_for_api_payment_type()
     {
         $qris = new Qris();
-        $this->assertEquals('qris', $qris->getApiPaymentType());
+        $this->assertEquals('qris', $qris->getPaymentType());
     }
 
     /**
-     * @test getApiPaymentPayload function should return array.
+     * @test getPaymentPayload function should return array.
      */
     public function it_provides_a_getter_for_api_payment_payload()
     {
-        $qris = new Qris();
-        $this->assertEquals(['acquirer' => 'gopay'], $qris->getApiPaymentPayload());
+        $qris = new Qris('gopay');
+        $this->assertEquals(['acquirer' => 'gopay'], $qris->getPaymentPayload());
 
         $qris->setAcquirer('shopee');
-        $this->assertEquals(['acquirer' => 'shopee'], $qris->getApiPaymentPayload());
+        $this->assertEquals(['acquirer' => 'shopee'], $qris->getPaymentPayload());
     }
 }

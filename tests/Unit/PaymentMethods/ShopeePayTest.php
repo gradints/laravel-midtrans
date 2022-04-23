@@ -8,29 +8,20 @@ use Tests\TestCase;
 class ShopeepayTest extends TestCase
 {
     /**
-     * @test getSnapName function should return 'shopeepay'.
-     */
-    public function it_provides_a_getter_for_snap_name()
-    {
-        $shopee = new ShopeePay();
-        $this->assertEquals('shopeepay', $shopee->getSnapName());
-    }
-
-    /**
-     * @test getApiPaymentType function should return 'shopeepay'.
+     * @test getPaymentType function should return 'shopeepay'.
      */
     public function it_provides_a_getter_for_api_payment_type()
     {
         $shopee = new ShopeePay();
-        $this->assertEquals('shopeepay', $shopee->getApiPaymentType());
+        $this->assertEquals('shopeepay', $shopee->getPaymentType());
     }
 
     /**
-     * @test getApiPaymentPayload function should return Shopeepay object.
+     * @test getPaymentPayload function should return Shopeepay object.
      */
     public function it_provides_a_getter_for_api_payment_payload()
     {
         $shopee = new ShopeePay();
-        $this->assertEquals([], $shopee->getApiPaymentPayload());
+        $this->assertEquals([], $shopee->getPaymentPayload());
     }
 }

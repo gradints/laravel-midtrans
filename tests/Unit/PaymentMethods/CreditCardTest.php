@@ -8,21 +8,12 @@ use Tests\TestCase;
 class CreditCardTest extends TestCase
 {
     /**
-     * @test getSnapName function should return 'credit_card'.
-     */
-    public function it_provides_a_getter_for_snap_name()
-    {
-        $creditCard = new CreditCard();
-        $this->assertEquals('credit_card', $creditCard->getSnapName());
-    }
-
-    /**
-     * @test getApiPaymentType function should return 'credit_card'.
+     * @test getPaymentType function should return 'credit_card'.
      */
     public function it_provides_a_getter_for_api_payment_type()
     {
         $creditCard = new CreditCard();
-        $this->assertEquals('credit_card', $creditCard->getApiPaymentType());
+        $this->assertEquals('credit_card', $creditCard->getPaymentType());
     }
 
     /**
@@ -93,14 +84,14 @@ class CreditCardTest extends TestCase
     }
 
     /**
-     * @test getApiPaymentPayload function should return credit card object.
+     * @test getPaymentPayload function should return credit card object.
      * https://api-docs.midtrans.com/?php#credit-card-object
      */
     public function it_provides_a_getter_for_api_payment_payload()
     {
         $tokenId = '4811117d16c884-2cc7-4624-b0a8-10273b7f6cc8';
         $creditCard = new CreditCard($tokenId);
-        $this->assertEquals(['token_id' => $tokenId], $creditCard->getApiPaymentPayload());
+        $this->assertEquals(['token_id' => $tokenId], $creditCard->getPaymentPayload());
 
         $creditCard->setBank('BNI');
         $creditCard->setInstallmentTerm(6);
@@ -115,6 +106,6 @@ class CreditCardTest extends TestCase
             'bins' => [4811, 5233],
             'type' => 'authorize',
             'save_token_id' => true,
-        ], $creditCard->getApiPaymentPayload());
+        ], $creditCard->getPaymentPayload());
     }
 }

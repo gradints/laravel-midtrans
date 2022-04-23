@@ -2,11 +2,9 @@
 
 namespace Gradints\LaravelMidtrans\Models\PaymentMethods;
 
-use Gradints\LaravelMidtrans\Interface\HasApi;
-use Gradints\LaravelMidtrans\Interface\HasSnap;
 use Gradints\LaravelMidtrans\Models\PaymentMethod;
 
-class MandiriBank extends PaymentMethod implements HasSnap, HasApi
+class MandiriBank extends PaymentMethod
 {
     private string $billInfo1 = 'Payment:';
     private string $billInfo2 = 'Online purchase';
@@ -17,12 +15,7 @@ class MandiriBank extends PaymentMethod implements HasSnap, HasApi
     private string $billInfo7 = '';
     private string $billInfo8 = '';
 
-    public function getSnapName(): string
-    {
-        return 'echannel';
-    }
-
-    public function getApiPaymentType(): string
+    public function getPaymentType(): string
     {
         return 'echannel';
     }
@@ -30,9 +23,9 @@ class MandiriBank extends PaymentMethod implements HasSnap, HasApi
     /**
      * https://api-docs.midtrans.com/?php#e-channel-object
      */
-    public function getApiPaymentPayload(): array
+    public function getPaymentPayload(): array
     {
-        $infos = [
+        return array_filter([
             // Label 1. Mandiri allows only 10 characters. Exceeding characters will be truncated.
             'bill_info1' => $this->billInfo1, // required
             // Value for Label 1. Mandiri allows only 30 characters. Exceeding characters will be truncated.
@@ -49,9 +42,7 @@ class MandiriBank extends PaymentMethod implements HasSnap, HasApi
             'bill_info7' => $this->billInfo7, // optional
             // Value for Label 1. Mandiri allows only 30 characters. Exceeding characters will be truncated.
             'bill_info8' => $this->billInfo8, // optional
-        ];
-
-        return array_filter($infos);
+        ]);
     }
 
     public function setBillInfo(string ...$info)
@@ -65,47 +56,4 @@ class MandiriBank extends PaymentMethod implements HasSnap, HasApi
         $this->billInfo7 = $info[6] ?? '';
         $this->billInfo8 = $info[7] ?? '';
     }
-
-    // api
-    // [
-    //     'transaction_details' => [
-    //         'order_id' => 'inv_19042022_01',
-    //         'gross_amount' => 20_000,
-    //     ],
-    //     'custom_expiry' => [
-    //         'duration' => 1,
-    //         'init' => 'day' // second, minute, hour, day],
-    //     ]
-    //     'customer_details' => [
-    //         'firstName' => 'John',
-    //         'lastName' => 'Doe',
-    //         'email' => 'johnDoe@example.com'
-    //     ],
-    //     'payment_type' => 'echannel',
-    //     'echannel' => [
-    //         'bill_info1' => 'payment for', // required
-    //         'bill_info2' => 'mss bill', // required
-    //     ],
-    // ];
-
-    // snap
-    // [
-    //     'transaction_details' => [
-    //         'order_id' => 'inv_19042022_01',
-    //         'gross_amount' => 20_000,
-    //     ],
-    //     'expiry' => [
-    //         'duration' => 1,
-    //         'init' => 'day' // second, minute, hour, day],
-    //     ]
-    //     'customer_details' => [
-    //         'firstName' => 'John',
-    //         'lastName' => 'Doe',
-    //         'email' => 'johnDoe@example.com'
-    //     ],
-    //     'enabled_payments' => ['echannel'],
-    //     'callbacks' => [
-    //         'finish' => 'https://demo.midtrans.com'
-    //     ]
-    // ];
 }

@@ -2,11 +2,9 @@
 
 namespace Gradints\LaravelMidtrans\Models\PaymentMethods;
 
-use Gradints\LaravelMidtrans\Interface\HasApi;
-use Gradints\LaravelMidtrans\Interface\HasSnap;
 use Gradints\LaravelMidtrans\Models\PaymentMethod;
 
-class Indomaret extends PaymentMethod implements HasSnap, HasApi
+class Indomaret extends PaymentMethod
 {
     private string $message = '';
 
@@ -20,20 +18,16 @@ class Indomaret extends PaymentMethod implements HasSnap, HasApi
         return $this->message;
     }
 
-    public function getSnapName(): string
+    public function getPaymentType(): string
     {
         return 'indomaret';
     }
 
-    public function getApiPaymentType(): string
+    public function getPaymentPayload(): array
     {
-        return 'indomaret';
-    }
-
-    public function getApiPaymentPayload(): array
-    {
+        // https://api-docs.midtrans.com/#indomaret
         return array_filter([
-            'store' => $this->getApiPaymentType(),
+            'store' => $this->getPaymentType(),
             'message' => $this->getMessage(),
         ]);
     }

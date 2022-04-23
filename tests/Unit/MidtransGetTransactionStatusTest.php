@@ -2,7 +2,6 @@
 
 namespace Tests\Unit;
 
-use Gradints\LaravelMidtrans\Enums\FraudStatus;
 use Gradints\LaravelMidtrans\Enums\TransactionStatus;
 use Gradints\LaravelMidtrans\Midtrans;
 use Gradints\LaravelMidtrans\MidtransGetTransactionStatus;
@@ -11,18 +10,6 @@ use Tests\TestCase;
 
 class MidtransGetTransactionStatusTest extends TestCase
 {
-    protected function setConfigCallback($app)
-    {
-        $app->config->set('midtrans.payment_notification', [
-            'pending' => ['App\Models\Purchase', 'updatePaymentStatusPending'],
-            'accept' => ['App\Models\Purchase', 'updatePaymentStatusAccepted'],
-            'cancel' => ['App\Models\Purchase', 'updatePaymentStatusCanceled'],
-            'deny' => ['App\Models\Purchase', 'updatePaymentStatusDenied'],
-            'expired' => ['App\Models\Purchase', 'updatePaymentStatusExpired'],
-            'failed' => ['App\Models\Purchase', 'updatePaymentStatusFailed'],
-        ]);
-    }
-
     /**
      * @test getStatusFunction should return response from midtrans
      * @define-env
@@ -30,7 +17,7 @@ class MidtransGetTransactionStatusTest extends TestCase
     public function it_provides_getter_status_transaction_accept()
     {
         $mock = $this->mock('alias:App\Models\Purchase');
-        $mock->shouldReceive('updatePaymentStatusPending')->once();
+        $mock->shouldReceive('onPending')->once();
 
         $orderId = 'inv_1324_4159';
         $statusCode = '200';
@@ -62,7 +49,7 @@ class MidtransGetTransactionStatusTest extends TestCase
             'approval_code' => '1578569243927',
         ];
 
-        $transactionMock = $this->mock('alias:'. \Midtrans\Transaction::class);
+        $transactionMock = $this->mock('alias:' . \Midtrans\Transaction::class);
         $transactionMock->shouldReceive('status')
             ->once()
             ->with($orderId)
@@ -72,96 +59,13 @@ class MidtransGetTransactionStatusTest extends TestCase
     }
 
     /**
-     * @test getExternalFunction should return ['App\Models\Purchase', 'updatePaymentStatusPending']
+     * @test getAction should return ['App\Models\Purchase', 'onPending']
      */
-    public function it_provides_a_getter_external_function_pending()
+    public function it_provides_a_get_action_pending()
     {
         $this->assertEquals(
-            [
-            'App\Models\Purchase',
-            'updatePaymentStatusPending',
-            ], 
-            MidtransGetTransactionStatus::getExternalFunction(TransactionStatus::PENDING->value)
+            ['App\Models\Purchase', 'onPending'],
+            MidtransGetTransactionStatus::getAction(TransactionStatus::PENDING->value)
         );
-    }
-
-    /**
-     * @test getExternalFunction should return ['App\Models\Purchase', 'updatePaymentStatusAccepted']
-     */
-    public function it_provides_a_getter_external_function_accepted()
-    {
-        $this->assertEquals(
-            [
-            'App\Models\Purchase',
-            'updatePaymentStatusAccepted',
-            ], 
-            MidtransGetTransactionStatus::getExternalFunction(TransactionStatus::SETTLEMENT->value)
-        );
-
-        $this->assertEquals(
-            [
-                'App\Models\Purchase',
-                'updatePaymentStatusAccepted',
-            ], 
-            MidtransGetTransactionStatus::getExternalFunction(
-                TransactionStatus::CAPTURE->value, FraudStatus::ACCEPT->value
-            )
-        );
-    }
-
-    /**
-     * @test getExternalFunction should return ['App\Models\Purchase', 'updatePaymentStatusCanceled']
-     */
-    public function it_provides_a_getter_external_function_canceled()
-    {
-        $this->assertEquals(
-            [
-                'App\Models\Purchase',
-                'updatePaymentStatusCanceled',
-            ],
-            MidtransGetTransactionStatus::getExternalFunction(TransactionStatus::CANCEL->value)
-        );  
-    }
-
-    /**
-     * @test getExternalFunction should return ['App\Models\Purchase', 'updatePaymentStatusDenied']
-     */
-    public function it_provides_a_getter_external_function_denied()
-    {
-        $this->assertEquals(
-            [
-                'App\Models\Purchase',
-                'updatePaymentStatusDenied',
-            ],
-            MidtransGetTransactionStatus::getExternalFunction(TransactionStatus::DENY->value)
-        ); 
-    }
-
-    /**
-     * @test getExternalFunction should return ['App\Models\Purchase', 'updatePaymentStatusExpired']
-     */
-    public function it_provides_a_getter_external_function_expired()
-    {
-        $this->assertEquals(
-            [
-                'App\Models\Purchase',
-                'updatePaymentStatusExpired',
-            ],
-            MidtransGetTransactionStatus::getExternalFunction(TransactionStatus::EXPIRE->value)
-        );  
-    }
-
-    /**
-     * @test getExternalFunction should return ['App\Models\Purchase', 'updatePaymentStatusFailed']
-     */
-    public function it_provides_a_getter_external_function_failed()
-    {
-        $this->assertEquals(
-            [
-                'App\Models\Purchase',
-                'updatePaymentStatusFailed',
-            ],
-            MidtransGetTransactionStatus::getExternalFunction(TransactionStatus::FAILURE->value)
-        );  
     }
 }

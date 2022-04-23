@@ -45,8 +45,6 @@ class Transaction
      */
     public function getItems(): array
     {
-        return array_map(function (Item $item) {
-            return $item->getData();
-        }, $this->items);
+        return array_map(fn (Item $item) => $item->getData(), $this->items);
     }
 }

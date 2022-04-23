@@ -22,7 +22,7 @@ class MidtransController extends Controller
     public function paymentNotification(PaymentNotificationRequest $request): void
     {
         // Call external function
-        $paymentNotification = MidtransGetTransactionStatus::getExternalFunction(
+        $paymentNotification = MidtransGetTransactionStatus::getAction(
             $request->transaction_status,
             $request->fraud_status
         );

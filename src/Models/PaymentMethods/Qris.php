@@ -1,13 +1,15 @@
-<?php 
+<?php
 
 namespace Gradints\LaravelMidtrans\Models\PaymentMethods;
 
-use Gradints\LaravelMidtrans\Interface\HasApi;
 use Gradints\LaravelMidtrans\Models\PaymentMethod;
 
-class Qris extends PaymentMethod implements HasApi
+class Qris extends PaymentMethod
 {
-    public function __construct(private string $acquirer = 'gopay')
+    /**
+     * Possible values are airpay, shopee, gopay.
+     */
+    public function __construct(private string $acquirer = '')
     {
     }
 
@@ -16,12 +18,12 @@ class Qris extends PaymentMethod implements HasApi
         $this->acquirer = $acquirer;
     }
 
-    public function getApiPaymentType(): string
+    public function getPaymentType(): string
     {
         return 'qris';
     }
-    
-    public function getApiPaymentPayload(): array
+
+    public function getPaymentPayload(): array
     {
         return [
             'acquirer' => $this->acquirer,

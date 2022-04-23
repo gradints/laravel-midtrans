@@ -19,25 +19,16 @@ class BCAKlikPayTest extends TestCase
     }
 
     /**
-     * @test getSnapName function should return 'bca_klikpay'.
-     */
-    public function it_provides_a_getter_for_snap_name()
-    {
-        $bca = new BCAKlikPay();
-        $this->assertEquals('bca_klikpay', $bca->getSnapName());
-    }
-
-    /**
-     * @test getApiPaymentType function should return 'bca_klikpay'.
+     * @test getPaymentType function should return 'bca_klikpay'.
      */
     public function it_provides_a_getter_for_api_payment_type()
     {
         $bca = new BCAKlikPay();
-        $this->assertEquals('bca_klikpay', $bca->getApiPaymentType());
+        $this->assertEquals('bca_klikpay', $bca->getPaymentType());
     }
 
     /**
-     * @test getApiPaymentPayload function should return name of the bank.
+     * @test getPaymentPayload function should return name of the bank.
      */
     public function it_provides_a_getter_for_api_payment_payload()
     {
@@ -47,6 +38,6 @@ class BCAKlikPayTest extends TestCase
 
         $this->assertEquals([
             'description' => $description,
-        ], $bca->getApiPaymentPayload());
+        ], $bca->getPaymentPayload());
     }
 }

@@ -8,29 +8,20 @@ use Tests\TestCase;
 class DanamonOnlineBankingTest extends TestCase
 {
     /**
-     * @test getSnapName function should return 'danamon_online'.
-     */
-    public function it_provides_a_getter_for_snap_name()
-    {
-        $danamon = new DanamonOnlineBanking();
-        $this->assertEquals('danamon_online', $danamon->getSnapName());
-    }
-
-    /**
-     * @test getApiPaymentType function should return 'danamon_online'.
+     * @test getPaymentType function should return 'danamon_online'.
      */
     public function it_provides_a_getter_for_api_payment_type()
     {
         $danamon = new DanamonOnlineBanking();
-        $this->assertEquals('danamon_online', $danamon->getApiPaymentType());
+        $this->assertEquals('danamon_online', $danamon->getPaymentType());
     }
 
     /**
-     * @test getApiPaymentPayload function should return name of the bank.
+     * @test getPaymentPayload function should return name of the bank.
      */
     public function it_provides_a_getter_for_api_payment_payload()
     {
         $danamon = new DanamonOnlineBanking();
-        $this->assertEquals([], $danamon->getApiPaymentPayload());
+        $this->assertEquals([], $danamon->getPaymentPayload());
     }
 }

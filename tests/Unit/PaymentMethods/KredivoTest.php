@@ -8,20 +8,20 @@ use Tests\TestCase;
 class KredivoTest extends TestCase
 {
     /**
-     * @test getApiPaymentType function should return 'kredivo'.
+     * @test getPaymentType function should return 'kredivo'.
      */
     public function it_provides_a_getter_for_api_payment_type()
     {
         $kredivo = new Kredivo();
-        $this->assertEquals('kredivo', $kredivo->getApiPaymentType());
+        $this->assertEquals('kredivo', $kredivo->getPaymentType());
     }
 
     /**
-     * @test getApiPaymentPayload function should return array.
+     * @test getPaymentPayload function should return array.
      */
     public function it_provides_a_getter_for_api_payment_payload()
     {
         $kredivo = new Kredivo();
-        $this->assertEquals([], $kredivo->getApiPaymentPayload());
+        $this->assertEquals([], $kredivo->getPaymentPayload());
     }
 }
