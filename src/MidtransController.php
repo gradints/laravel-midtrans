@@ -33,11 +33,11 @@ class MidtransController extends Controller
     public function recurringNotification(PaymentNotificationRequest $request): void
     {
         // Call external function
-        $recurringNotification = Config::get('midtrans.recurring_notification');
-        if (count($recurringNotification)) {
-            [$class, $function] = $recurringNotification;
-            $class::$function($request->all());
-        }
+        // $recurringNotification = Config::get('midtrans.recurring_notification');
+        // if (count($recurringNotification)) {
+        //     [$class, $function] = $recurringNotification;
+        //     $class::$function($request->all());
+        // }
     }
 
     public function payAccountNotification(PayAccountNotificationRequest $request): void

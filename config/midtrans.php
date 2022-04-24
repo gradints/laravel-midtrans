@@ -74,9 +74,9 @@ return [
         'partial_chargeback' => ['App\Models\Purchase', 'onPartialChargeback'],
     ],
     // Function to run when Midtrans send HTTP Post request to recurring notification route
-    'recurring_notification' => ['App\Models\User', 'updateMembershipStatus'],
+    // 'recurring_notification' => ['App\Models\User', 'updateMembershipStatus'],
     // Function to run when Midtrans send HTTP Post request to pay account notification route
-    'pay_account_notification' => '',
+    // 'pay_account_notification' => '',
 
     /*
      |--------------------------------------------------------------------------

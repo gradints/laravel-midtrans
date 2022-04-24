@@ -32,36 +32,6 @@ class PaymentNotificationRequestTest extends TestCase
      * the request comes from Midtrans itself.
      * @define-env setServerKey
      */
-    public function test_it_validates_signature_in_payment_recurring_notification()
-    {
-        $url = route('midtrans.payment-notification');
-
-        $orderId = '1111';
-        $statusCode = '200';
-        $grossAmount = '100000';
-
-        $request = [
-            'order_id' => $orderId,
-            'status_code' => $statusCode,
-            'gross_amount' => $grossAmount,
-            'signature_key' => 'invalid_signature',
-        ];
-
-        $this->postJson($url, $request)->assertJsonValidationErrors([
-            'signature_key' => 'signature is invalid.',
-        ]);
-
-        $serverKey = 'askvnoibnosifnboseofinbofinfgbiufglnbfg';
-        $input = $orderId . $statusCode . $grossAmount . $serverKey;
-        $request['signature_key'] = openssl_digest($input, 'sha512');
-        $this->postJson($url, $request)->assertJsonMissingValidationErrors('signature_key');
-    }
-
-    /**
-     * MidtransRequest should validate signature_key to make sure
-     * the request comes from Midtrans itself.
-     * @define-env setServerKey
-     */
     public function test_signature_key_should_fail_when_required_column_is_not_provided()
     {
         $url = route('midtrans.payment-notification');
