@@ -56,7 +56,7 @@ class Midtrans
 
     public function getSnapPaymentMethods(): array
     {
-        return Config::get('midtrans.payment_methods.snap');
+        return Config::get('midtrans.enabled_payments');
     }
 
     public function generateRequestPayloadForSnap(): array

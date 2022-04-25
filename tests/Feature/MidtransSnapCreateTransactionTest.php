@@ -13,17 +13,10 @@ class MidtransSnapCreateTransactionTest extends TestCase
     {
         $app->config->set('midtrans.redirect.finish', 'https://example.com/payment-done');
     }
-    protected function setConfigPaymentMethodSnap($app)
-    {
-        $app->config->set('midtrans.payment_methods.snap', [
-            'permata_va',
-        ]);
-    }
 
     /**
      * @test
      * @define-env setConfigCallback
-     * @define-env setConfigPaymentMethodSnap
      */
     public function it_calls_midtrans_snap_create_transaction_with_snap_payload()
     {

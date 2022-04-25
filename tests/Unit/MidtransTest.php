@@ -15,7 +15,7 @@ class MidtransTest extends TestCase
     }
     protected function setConfigPaymentMethodSnap($app)
     {
-        $app->config->set('midtrans.payment_methods.snap', [
+        $app->config->set('midtrans.enabled_payments', [
             'permata_va',
             'bri_va',
             'gopay',

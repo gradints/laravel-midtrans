@@ -11,14 +11,9 @@ class MidtransSnapRequestPayloadTest extends TestCase
     {
         $app->config->set('midtrans.redirect.finish', 'https://example.com/payment-done');
     }
-    protected function setConfigExpiry($app)
-    {
-        $app->config->set('midtrans.expiry.duration', 1);
-        $app->config->set('midtrans.expiry.duration_unit', 'day');
-    }
     protected function setConfigPaymentMethodSnap($app)
     {
-        $app->config->set('midtrans.payment_methods.snap', [
+        $app->config->set('midtrans.enabled_payments', [
             'permata_va',
             'bri_va',
             'gopay',
@@ -28,7 +23,6 @@ class MidtransSnapRequestPayloadTest extends TestCase
     /**
      * @test createSnapTransaction
      * @define-env setConfigCallback
-     * @define-env setConfigExpiry
      * @define-env setConfigPaymentMethodSnap
      */
     public function it_provides_function_to_generate_request_payload_for_snap()

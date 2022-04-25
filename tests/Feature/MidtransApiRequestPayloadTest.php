@@ -12,25 +12,10 @@ class MidtransApiRequestPayloadTest extends TestCase
     {
         $app->config->set('midtrans.redirect.finish', 'https://example.com/payment-done');
     }
-    protected function setConfigExpiry($app)
-    {
-        $app->config->set('midtrans.expiry.duration', 1);
-        $app->config->set('midtrans.expiry.duration_unit', 'day');
-    }
-    protected function setConfigPaymentMethodSnap($app)
-    {
-        $app->config->set('midtrans.payment_methods.snap', [
-            'permata_va',
-            'bri_va',
-            'gopay',
-        ]);
-    }
 
     /**
      * @test createSnapTransaction
      * @define-env setConfigCallback
-     * @define-env setConfigExpiry
-     * @define-env setConfigPaymentMethodSnap
      */
     public function it_provides_function_to_generate_request_payload_for_api()
     {
@@ -71,8 +56,8 @@ class MidtransApiRequestPayloadTest extends TestCase
                 'email' => $email,
             ],
             'custom_expiry' => [
-                'duration' => 1,
-                'init' => 'day', // second, minute, hour, day],
+                'expiry_duration' => 1,
+                'unit' => 'day', // second, minute, hour, day],
             ],
             'payment_type' => $permata->getPaymentType(),
             $permata->getPaymentType() => $permata->getPaymentPayload(),
