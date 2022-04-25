@@ -4,21 +4,13 @@ namespace Tests\Unit;
 
 use Gradints\LaravelMidtrans\Enums\TransactionStatus;
 use Gradints\LaravelMidtrans\Midtrans;
-use Gradints\LaravelMidtrans\MidtransGetTransactionStatus;
 use Illuminate\Support\Facades\Config;
 use Tests\TestCase;
 
 class MidtransGetTransactionStatusTest extends TestCase
 {
-    /**
-     * @test getStatusFunction should return response from midtrans
-     * @define-env
-     */
-    public function it_provides_getter_status_transaction_accept()
+    public function test_it_provides_getter_status_transaction_accept()
     {
-        $mock = $this->mock('alias:App\Models\Purchase');
-        $mock->shouldReceive('onPending')->once();
-
         $orderId = 'inv_1324_4159';
         $statusCode = '200';
         $grossAmount = '14500.00';
@@ -52,20 +44,33 @@ class MidtransGetTransactionStatusTest extends TestCase
         $transactionMock = $this->mock('alias:' . \Midtrans\Transaction::class);
         $transactionMock->shouldReceive('status')
             ->once()
-            ->with($orderId)
+            ->withArgs([$orderId])
             ->andReturn($request);
 
-        MidtransGetTransactionStatus::check($orderId);
+        $mock = $this->mock('alias:App\Models\Purchase');
+        $mock->shouldReceive('onPending')->withArgs([$request])->once();
+
+        Midtrans::getTransactionStatus($orderId);
     }
 
-    /**
-     * @test getAction should return ['App\Models\Purchase', 'onPending']
-     */
-    public function it_provides_a_get_action_pending()
+    public function test_it_doesnt_error_if_payment_notification_config_is_empty()
     {
-        $this->assertEquals(
-            ['App\Models\Purchase', 'onPending'],
-            MidtransGetTransactionStatus::getAction(TransactionStatus::PENDING->value)
-        );
+        $request = [
+            'transaction_status' => 'pending',
+        ];
+
+        $orderId = 'TR-0001';
+
+        $transactionMock = $this->mock('alias:' . \Midtrans\Transaction::class);
+        $transactionMock->shouldReceive('status')
+            ->once()
+            ->withArgs([$orderId])
+            ->andReturn($request);
+
+        Config::set('midtrans.payment_notification.pending', []);
+
+        $this->assertEquals([], TransactionStatus::from('pending')->getAction());
+
+        Midtrans::getTransactionStatus($orderId);
     }
 }

@@ -2,9 +2,11 @@
 
 namespace Gradints\LaravelMidtrans;
 
+use Gradints\LaravelMidtrans\Enums\TransactionStatus;
 use Gradints\LaravelMidtrans\Models\Customer;
 use Gradints\LaravelMidtrans\Models\PaymentMethod;
 use Gradints\LaravelMidtrans\Models\Transaction;
+use Gradints\LaravelMidtrans\Traits\CallFunction;
 use Illuminate\Support\Facades\Config;
 use Midtrans\Config as MidtransConfig;
 use Midtrans\CoreApi as MidtransCoreApi;
@@ -12,6 +14,8 @@ use Midtrans\Snap as MidtransSnap;
 
 class Midtrans
 {
+    use CallFunction;
+
     private Customer $customer;
 
     private Transaction $transaction;
@@ -19,13 +23,9 @@ class Midtrans
     public function __construct()
     {
         // https://docs.midtrans.com/en/snap/integration-guide?id=sample-request
-        // Set your Merchant Server Key
         MidtransConfig::$serverKey = config('midtrans.server_key');
-        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
         MidtransConfig::$isProduction = app()->environment('production');
-        // Set sanitization on (default)
         // MidtransConfig::$isSanitized = true;
-        // Set 3DS transaction for credit card to true
         MidtransConfig::$is3ds = config('midtrans.enable_3ds');
     }
 
@@ -125,6 +125,29 @@ class Midtrans
     public function createApiTransaction(PaymentMethod $paymentMethod): object
     {
         $payload = $this->generateRequestPayloadForApi($paymentMethod);
+
         return MidtransCoreApi::charge($payload);
+    }
+
+    public static function getTransactionStatus(string $orderId)
+    {
+        // TODO check fraud status
+
+        // in https://api-docs.midtrans.com/?php#transaction-status
+
+        $response = \Midtrans\Transaction::status($orderId);
+
+        // TODO throw InvalidRequestException
+
+        return self::executeActionByStatus($response['transaction_status'], $response);
+    }
+
+    public static function executeActionByStatus(string $status, $parameters)
+    {
+        $function = TransactionStatus::from($status)->getAction();
+
+        if ($function) {
+            return self::callFunction($function, $parameters);
+        }
     }
 }

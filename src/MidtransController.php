@@ -2,6 +2,7 @@
 
 namespace Gradints\LaravelMidtrans;
 
+use Gradints\LaravelMidtrans\Enums\TransactionStatus;
 use Gradints\LaravelMidtrans\Traits\CallFunction;
 use Gradints\LaravelMidtrans\Validations\Requests\PayAccountNotificationRequest;
 use Gradints\LaravelMidtrans\Validations\Requests\PaymentNotificationRequest;
@@ -17,20 +18,16 @@ class MidtransController extends Controller
     // Best Practices to Handle Notification
     // https://api-docs.midtrans.com/?php#best-practices-to-handle-notification
 
-    // TODO ignore status_code other than 200
-
-    public function paymentNotification(PaymentNotificationRequest $request): void
+    public function paymentNotification(PaymentNotificationRequest $request)
     {
-        // Call external function
-        $paymentNotification = MidtransGetTransactionStatus::getAction(
-            $request->transaction_status,
-            $request->fraud_status
-        );
+        // TODO ignore status_code other than 200
+        // TODO ignore transaction status if somehow Midtrans notification delayed or unordered
+        // TODO check fraud status
 
-        self::callFunction($paymentNotification, $request->all());
+        return Midtrans::executeActionByStatus($request->transaction_status, $request->all());
     }
 
-    public function recurringNotification(PaymentNotificationRequest $request): void
+    public function recurringNotification(PaymentNotificationRequest $request)
     {
         // Call external function
         // $recurringNotification = Config::get('midtrans.recurring_notification');
@@ -40,7 +37,7 @@ class MidtransController extends Controller
         // }
     }
 
-    public function payAccountNotification(PayAccountNotificationRequest $request): void
+    public function payAccountNotification(PayAccountNotificationRequest $request)
     {
         // do something
     }

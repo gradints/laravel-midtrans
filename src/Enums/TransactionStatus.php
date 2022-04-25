@@ -22,9 +22,7 @@ enum TransactionStatus: string
 
     public function getAction(): array
     {
-        return Config::get('midtrans.payment_notification.' . $this->value);
-        
-        // TODO throw InvalidTransactionStatusException
+        return Config::get('midtrans.payment_notification.' . $this->value, []);
     }
 
     // Credit card: authorize > capture > settlement
