@@ -11,6 +11,7 @@ return [
      */
 
     'server_key' => env('midtrans_server_key'),
+    'merchant_id' => env('midtrans_merchant_id'),
     'enable_3ds' => true,
 
     /*

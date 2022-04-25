@@ -107,8 +107,8 @@ class Midtrans
             ],
             // set expiry, https://api-docs.midtrans.com/?php#custom-expiry-object
             'custom_expiry' => [
-                'duration' => Config::get('midtrans.expiry.duration'),
-                'init' => Config::get('midtrans.expiry.duration_unit'),
+                'expiry_duration' => Config::get('midtrans.expiry.duration'),
+                'unit' => Config::get('midtrans.expiry.duration_unit'),
             ],
             'payment_type' => $paymentMethod->getPaymentType(),
             $paymentMethod->getPaymentType() => $paymentMethod->getPaymentPayload(),
