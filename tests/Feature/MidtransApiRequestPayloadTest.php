@@ -37,10 +37,30 @@ class MidtransApiRequestPayloadTest extends TestCase
         $firstName = 'John';
         $lastName = 'Doe';
         $email = 'johndoe@example.com';
+        $billingAddress = [
+            'first_name' => 'TEST',
+            'last_name' => 'UTOMO',
+            'phone' => '081 2233 44-55',
+            'address' => 'Sudirman',
+            'city' => 'Jakarta',
+            'postal_code' => '12190',
+            'country_code' => 'IDN',
+        ];
+        $shippingAddress = [
+            'first_name' => 'TEST',
+            'last_name' => 'UTOMO',
+            'phone' => '0 8128-75 7-9338',
+            'address' => 'Sudirman',
+            'city' => 'Jakarta',
+            'postal_code' => '12190',
+            'country_code' => 'IDN',
+        ];
 
         $midtrans = new Midtrans();
         $midtrans->setTransaction($orderId, $grossAmount, $items);
         $midtrans->setCustomer("$firstName $lastName", $email);
+        $midtrans->getCustomer()->setBillingAddress($billingAddress);
+        $midtrans->getCustomer()->setShippingAddress($shippingAddress);
 
         $permata = new PermataBank();
         $requestPayload = $midtrans->generateRequestPayloadForApi($permata);
@@ -54,6 +74,8 @@ class MidtransApiRequestPayloadTest extends TestCase
                 'firstName' => $firstName,
                 'lastName' => $lastName,
                 'email' => $email,
+                'billing_address' => $billingAddress,
+                'shipping_address' => $shippingAddress,
             ],
             'custom_expiry' => [
                 'expiry_duration' => 1,

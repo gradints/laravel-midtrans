@@ -33,7 +33,7 @@ class MidtransApiCreateTransactionTest extends TestCase
 
         $midtrans = new Midtrans();
 
-        $orderId = 'TR/20220415/00001';
+        $orderId = 'TR-20220415-00001';
         $grossAmount = 20_000;
 
         $customerName = 'John Doe';

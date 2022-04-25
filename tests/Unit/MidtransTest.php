@@ -56,7 +56,7 @@ class MidtransTest extends TestCase
         $midtrans = new Midtrans();
         $this->assertNull($midtrans->getTransaction());
 
-        $orderId = 'TR/20220415/0001';
+        $orderId = 'TR-20220415-0001';
         $grossAmount = 20_000;
         $tansaction = new Transaction($orderId, $grossAmount);
 

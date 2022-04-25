@@ -37,7 +37,7 @@ class MidtransSnapCreateTransactionTest extends TestCase
         $customerName = 'John Doe';
         $customerEmail = 'johnDoe@example.test';
 
-        $orderId = 'TR/20200415/00001';
+        $orderId = 'TR-20200415-00001';
         $grossAmount = 20_000;
 
         $midtrans = new Midtrans();

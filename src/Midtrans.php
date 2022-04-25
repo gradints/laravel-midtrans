@@ -39,7 +39,7 @@ class Midtrans
         return $this->customer ?? null;
     }
 
-    public function setTransaction(string $orderId, int $grossAmount, array $items = [])
+    public function setTransaction(string $orderId, int $grossAmount, iterable $items = [])
     {
         $this->transaction = new Transaction($orderId, $grossAmount, $items);
     }
@@ -70,11 +70,13 @@ class Midtrans
             // set item_details, https://api-docs.midtrans.com/?php#item-details-object
             'item_details' => $this->transaction->getItems(),
             // set customer_details, https://api-docs.midtrans.com/?php#customer-details-object
-            'customer_details' => [
+            'customer_details' => array_filter([
                 'firstName' => $this->customer->getFirstName(),
                 'lastName' => $this->customer->getLastName(),
                 'email' => $this->customer->getEmail(),
-            ],
+                'billing_address' => $this->customer->getBillingAddress(),
+                'shipping_address' => $this->customer->getShippingAddress(),
+            ]),
             // set expiry
             'expiry' => [
                 'duration' => Config::get('midtrans.expiry.duration'),
@@ -100,11 +102,13 @@ class Midtrans
             // set item_details, https://api-docs.midtrans.com/?php#item-details-object
             'item_details' => $this->transaction->getItems(),
             // set customer_details, https://api-docs.midtrans.com/?php#customer-details-object
-            'customer_details' => [
+            'customer_details' => array_filter([
                 'firstName' => $this->customer->getFirstName(),
                 'lastName' => $this->customer->getLastName(),
                 'email' => $this->customer->getEmail(),
-            ],
+                'billing_address' => $this->customer->getBillingAddress(),
+                'shipping_address' => $this->customer->getShippingAddress(),
+            ]),
             // set expiry, https://api-docs.midtrans.com/?php#custom-expiry-object
             'custom_expiry' => [
                 'expiry_duration' => Config::get('midtrans.expiry.duration'),

@@ -5,6 +5,7 @@ namespace Gradints\LaravelMidtrans\Models;
 class Customer
 {
     private array $billingAddress = [];
+    private array $shippingAddress = [];
 
     public function __construct(
         private string $name,
