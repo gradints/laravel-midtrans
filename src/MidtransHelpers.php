@@ -1,10 +1,10 @@
 <?php
 
-namespace Gradints\LaravelMidtrans\Traits;
+namespace Gradints\LaravelMidtrans;
 
 use Gradints\LaravelMidtrans\Exceptions\InvalidActionException;
 
-trait CallFunction
+class MidtransHelpers
 {
     /**
      * callFunction(['Folder\ClassName', 'methodName'], $args1, $args2)

@@ -3,7 +3,6 @@
 namespace Gradints\LaravelMidtrans\Validations\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Support\Facades\Config;
 
 class HasValidSignature implements Rule
 {
@@ -20,7 +19,7 @@ class HasValidSignature implements Rule
         $statusCode = request()->get('status_code') ?? 'empty';
         $grossAmount = request()->get('gross_amount') ?? 'empty';
 
-        $serverKey = Config::get('midtrans.server_key');
+        $serverKey = config('midtrans.server_key');
         $signature = openssl_digest($orderId . $statusCode . $grossAmount . $serverKey, 'sha512');
 
         // payment / recurring notification

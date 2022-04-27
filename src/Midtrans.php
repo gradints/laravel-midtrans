@@ -6,16 +6,12 @@ use Gradints\LaravelMidtrans\Enums\TransactionStatus;
 use Gradints\LaravelMidtrans\Models\Customer;
 use Gradints\LaravelMidtrans\Models\PaymentMethod;
 use Gradints\LaravelMidtrans\Models\Transaction;
-use Gradints\LaravelMidtrans\Traits\CallFunction;
-use Illuminate\Support\Facades\Config;
 use Midtrans\Config as MidtransConfig;
 use Midtrans\CoreApi as MidtransCoreApi;
 use Midtrans\Snap as MidtransSnap;
 
 class Midtrans
 {
-    use CallFunction;
-
     private Customer $customer;
 
     private Transaction $transaction;
@@ -25,8 +21,8 @@ class Midtrans
         // https://docs.midtrans.com/en/snap/integration-guide?id=sample-request
         MidtransConfig::$serverKey = config('midtrans.server_key');
         MidtransConfig::$isProduction = app()->environment('production');
-        // MidtransConfig::$isSanitized = true;
-        MidtransConfig::$is3ds = config('midtrans.enable_3ds');
+        MidtransConfig::$isSanitized = config('midtrans.use_sanitizer', false);
+        MidtransConfig::$is3ds = config('midtrans.enable_3ds', false);
     }
 
     public function setCustomer(string $name, string $email, string $phone = '')
@@ -51,12 +47,12 @@ class Midtrans
 
     public function getCallbackUrl(): string
     {
-        return Config::get('midtrans.redirect.finish');
+        return config('midtrans.redirect.finish');
     }
 
     public function getSnapPaymentMethods(): array
     {
-        return Config::get('midtrans.enabled_payments');
+        return config('midtrans.enabled_payments');
     }
 
     public function generateRequestPayloadForSnap(): array
@@ -79,8 +75,8 @@ class Midtrans
             ]),
             // set expiry
             'expiry' => [
-                'duration' => Config::get('midtrans.expiry.duration'),
-                'init' => Config::get('midtrans.expiry.duration_unit'),
+                'duration' => config('midtrans.expiry.duration'),
+                'init' => config('midtrans.expiry.duration_unit'),
             ],
             // set enabled_payments
             'enabled_payments' => $this->getSnapPaymentMethods(),
@@ -111,8 +107,8 @@ class Midtrans
             ]),
             // set expiry, https://api-docs.midtrans.com/?php#custom-expiry-object
             'custom_expiry' => [
-                'expiry_duration' => Config::get('midtrans.expiry.duration'),
-                'unit' => Config::get('midtrans.expiry.duration_unit'),
+                'expiry_duration' => config('midtrans.expiry.duration'),
+                'unit' => config('midtrans.expiry.duration_unit'),
             ],
             'payment_type' => $paymentMethod->getPaymentType(),
             $paymentMethod->getPaymentType() => $paymentMethod->getPaymentPayload(),
@@ -133,7 +129,7 @@ class Midtrans
         return MidtransCoreApi::charge($payload);
     }
 
-    public static function getTransactionStatus(string $orderId)
+    public static function getTransactionStatus(string $orderId): void
     {
         // TODO check fraud status
 
@@ -141,17 +137,21 @@ class Midtrans
 
         $response = \Midtrans\Transaction::status($orderId);
 
+        // if ($response['status_code'] !== 200) {
+        //     return;
+        // }
+
         // TODO throw InvalidRequestException
 
-        return self::executeActionByStatus($response['transaction_status'], $response);
+        self::executeActionByStatus($response['transaction_status'], $response);
     }
 
-    public static function executeActionByStatus(string $status, $parameters)
+    public static function executeActionByStatus(string $status, $payload): void
     {
         $function = TransactionStatus::from($status)->getAction();
 
         if ($function) {
-            return self::callFunction($function, $parameters);
+            MidtransHelpers::callFunction($function, $payload);
         }
     }
 }

@@ -14,7 +14,7 @@ class MidtransGetTransactionStatusTest extends TestCase
         $orderId = 'inv_1324_4159';
         $statusCode = '200';
         $grossAmount = '14500.00';
-        $serverKey = Config::get('midtrans.server_key');
+        $serverKey = config('midtrans.server_key');
         $input = $orderId . $statusCode . $grossAmount . $serverKey;
         $signature = openssl_digest($input, 'sha512');
 
@@ -47,7 +47,7 @@ class MidtransGetTransactionStatusTest extends TestCase
             ->withArgs([$orderId])
             ->andReturn($request);
 
-        $mock = $this->mock('alias:App\Models\Purchase');
+        $mock = $this->mock('alias:' . config('midtrans.payment_notification.pending')[0]);
         $mock->shouldReceive('onPending')->withArgs([$request])->once();
 
         Midtrans::getTransactionStatus($orderId);

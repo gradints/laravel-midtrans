@@ -2,8 +2,6 @@
 
 namespace Gradints\LaravelMidtrans\Enums;
 
-use Illuminate\Support\Facades\Config;
-
 // https://api-docs.midtrans.com/?php#transaction-status
 enum TransactionStatus: string
 {
@@ -20,11 +18,15 @@ enum TransactionStatus: string
     case EXPIRE = 'expire';
     case FAILURE = 'failure';
 
+    /**
+     * Match transaction status with their action defined in config.payment_notification
+     * returns in format [path/to/classname, functionToBeCalled]
+     * Fallback to empty array if the config is not defined.
+     *
+     * @return array
+     */
     public function getAction(): array
     {
-        return Config::get('midtrans.payment_notification.' . $this->value, []);
+        return config('midtrans.payment_notification.' . $this->value, []);
     }
-
-    // Credit card: authorize > capture > settlement
-    // Other: pending > settlement
 }

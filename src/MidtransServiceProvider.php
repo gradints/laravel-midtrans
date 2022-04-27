@@ -27,5 +27,9 @@ class MidtransServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config/midtrans.php' => config_path('midtrans.php'),
         ], 'config');
+
+        $this->publishes([
+            __DIR__ . '/NotificationAction.php' => app_path('Services/PaymentGateway/NotificationAction.php'),
+        ], 'action');
     }
 }

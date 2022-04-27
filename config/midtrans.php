@@ -10,8 +10,14 @@ return [
      |
      */
 
+    // Get from https://dashboard.midtrans.com/settings/config_info
     'server_key' => env('midtrans_server_key'),
     'merchant_id' => env('midtrans_merchant_id'),
+
+    // It truncate fields that have length limit, remove not allowed characters from other fields
+    'use_sanitizer' => env('midtrans_use_sanitizer'),
+
+    //
     'enable_3ds' => true,
 
     /*
@@ -61,18 +67,18 @@ return [
      | Function to run when Midtrans send HTTP Post request to payment notification route
      */
     'payment_notification' => [
-        'pending' => ['App\Models\Purchase', 'onPending'],
-        'capture' => ['App\Models\Purchase', 'onCapture'],
-        'settlement' => ['App\Models\Purchase', 'onSettlement'],
-        'cancel' => ['App\Models\Purchase', 'onCancel'],
-        'deny' => ['App\Models\Purchase', 'onDeny'],
-        'expire' => ['App\Models\Purchase', 'onExpire'],
-        'failure' => ['App\Models\Purchase', 'onFailure'],
-        'authorize' => ['App\Models\Purchase', 'onAuthorize'],
-        'refund' => ['App\Models\Purchase', 'onRefund'],
-        'partial_refund' => ['App\Models\Purchase', 'onPartialRefund'],
-        'chargeback' => ['App\Models\Purchase', 'onChargeback'],
-        'partial_chargeback' => ['App\Models\Purchase', 'onPartialChargeback'],
+        'pending' => ['App\Services\PaymentGateway\NotificationAction', 'onPending'],
+        'capture' => ['App\Services\PaymentGateway\NotificationAction', 'onCapture'],
+        'settlement' => ['App\Services\PaymentGateway\NotificationAction', 'onSettlement'],
+        'cancel' => ['App\Services\PaymentGateway\NotificationAction', 'onCancel'],
+        'deny' => ['App\Services\PaymentGateway\NotificationAction', 'onDeny'],
+        'expire' => ['App\Services\PaymentGateway\NotificationAction', 'onExpire'],
+        'failure' => ['App\Services\PaymentGateway\NotificationAction', 'onFailure'],
+        'authorize' => ['App\Services\PaymentGateway\NotificationAction', 'onAuthorize'],
+        'refund' => ['App\Services\PaymentGateway\NotificationAction', 'onRefund'],
+        'partial_refund' => ['App\Services\PaymentGateway\NotificationAction', 'onPartialRefund'],
+        'chargeback' => ['App\Services\PaymentGateway\NotificationAction', 'onChargeback'],
+        'partial_chargeback' => ['App\Services\PaymentGateway\NotificationAction', 'onPartialChargeback'],
     ],
     // Function to run when Midtrans send HTTP Post request to recurring notification route
     // 'recurring_notification' => ['App\Models\User', 'updateMembershipStatus'],
