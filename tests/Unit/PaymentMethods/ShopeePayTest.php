@@ -22,6 +22,8 @@ class ShopeepayTest extends TestCase
     public function it_provides_a_getter_for_api_payment_payload()
     {
         $shopee = new ShopeePay();
-        $this->assertEquals([], $shopee->getPaymentPayload());
+        $this->assertEquals([
+            'callback_url' => config('midtrans.redirect.finish'),
+        ], $shopee->getPaymentPayload());
     }
 }

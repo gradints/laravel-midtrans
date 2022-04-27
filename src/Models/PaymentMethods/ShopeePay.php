@@ -13,7 +13,9 @@ class ShopeePay extends PaymentMethod
 
     public function getPaymentPayload(): array
     {
-        return [];
+        return [
+            'callback_url' => config('midtrans.redirect.finish'),
+        ];
     }
 
     // api
