@@ -13,7 +13,7 @@ class IndomaretTest extends TestCase
     public function it_provides_a_getter_for_api_payment_type()
     {
         $indomaret = new Indomaret();
-        $this->assertEquals('indomaret', $indomaret->getPaymentType());
+        $this->assertEquals('cstore', $indomaret->getPaymentType());
     }
 
     /**
@@ -34,12 +34,12 @@ class IndomaretTest extends TestCase
     {
         $indomaret = new Indomaret();
         $this->assertEquals([
-            'store' => 'indomaret',
+            'store' => 'Indomaret',
         ], $indomaret->getPaymentPayload());
 
         $indomaret->setMessage('Tiket1 transaction');
         $this->assertEquals([
-            'store' => 'indomaret',
+            'store' => 'Indomaret',
             'message' => 'Tiket1 transaction',
         ], $indomaret->getPaymentPayload());
     }
