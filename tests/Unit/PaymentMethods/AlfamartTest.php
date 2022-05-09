@@ -13,7 +13,7 @@ class AlfamartTest extends TestCase
     public function it_provides_a_getter_for_api_payment_type()
     {
         $alfamart = new Alfamart();
-        $this->assertEquals('alfamart', $alfamart->getPaymentType());
+        $this->assertEquals('cstore', $alfamart->getPaymentType());
     }
 
     /**

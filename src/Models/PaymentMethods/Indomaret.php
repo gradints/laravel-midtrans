@@ -20,14 +20,14 @@ class Indomaret extends PaymentMethod
 
     public function getPaymentType(): string
     {
-        return 'indomaret';
+        return 'cstore';
     }
 
     public function getPaymentPayload(): array
     {
         // https://api-docs.midtrans.com/#indomaret
         return array_filter([
-            'store' => $this->getPaymentType(),
+            'store' => 'Indomaret',
             'message' => $this->getMessage(),
         ]);
     }

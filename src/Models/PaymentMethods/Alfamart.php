@@ -24,13 +24,13 @@ class Alfamart extends PaymentMethod
 
     public function getPaymentType(): string
     {
-        return 'alfamart';
+        return 'cstore';
     }
 
     public function getPaymentPayload(): array
     {
         return array_filter([
-            'store' => $this->getPaymentType(),
+            'store' => 'alfamart',
             'alfamart_free_text_1' => $this->alfamartFreeText1,
             'alfamart_free_text_2' => $this->alfamartFreeText2,
             'alfamart_free_text_3' => $this->alfamartFreeText3,
