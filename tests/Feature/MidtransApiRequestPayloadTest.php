@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Gradints\LaravelMidtrans\Midtrans;
 use Gradints\LaravelMidtrans\Models\PaymentMethods\PermataBank;
+use Gradints\LaravelMidtrans\Models\PaymentMethods\UOBEzPay;
 use Tests\TestCase;
 
 class MidtransApiRequestPayloadTest extends TestCase
@@ -62,14 +63,22 @@ class MidtransApiRequestPayloadTest extends TestCase
         $midtrans->getCustomer()->setBillingAddress($billingAddress);
         $midtrans->getCustomer()->setShippingAddress($shippingAddress);
 
-        $permata = new PermataBank();
-        $requestPayload = $midtrans->generateRequestPayloadForApi($permata);
-        $expected = [
+        $expectedTransactionDetails = [
             'transaction_details' => [
                 'order_id' => $orderId,
                 'gross_amount' => $grossAmount,
             ],
+        ];
+        $expectedCustomExpiry = [
+            'custom_expiry' => [
+                'expiry_duration' => 1,
+                'unit' => 'day', // second, minute, hour, day],
+            ],
+        ];
+        $expectedItems = [
             'item_details' => $items,
+        ];
+        $expectedCustomerDetails = [
             'customer_details' => [
                 'firstName' => $firstName,
                 'lastName' => $lastName,
@@ -77,13 +86,28 @@ class MidtransApiRequestPayloadTest extends TestCase
                 'billing_address' => $billingAddress,
                 'shipping_address' => $shippingAddress,
             ],
-            'custom_expiry' => [
-                'expiry_duration' => 1,
-                'unit' => 'day', // second, minute, hour, day],
-            ],
-            'payment_type' => $permata->getPaymentType(),
-            $permata->getPaymentType() => $permata->getPaymentPayload(),
         ];
+
+        $permata = new PermataBank();
+        $requestPayload = $midtrans->generateRequestPayloadForApi($permata);
+        $expected = array_merge(
+            $expectedTransactionDetails,
+            $expectedCustomExpiry,
+            $expectedItems,
+            $expectedCustomerDetails,
+            ['payment_type' => $permata->getPaymentType(), $permata->getPaymentType() => $permata->getPaymentPayload()]
+        );
+        $this->assertEquals($expected, $requestPayload);
+
+        $UOBEzPay = new UOBEzPay();
+        $requestPayload = $midtrans->generateRequestPayloadForApi($UOBEzPay);
+        $expected = array_merge(
+            $expectedTransactionDetails,
+            $expectedCustomExpiry,
+            $expectedItems,
+            $expectedCustomerDetails,
+            ['payment_type' => $UOBEzPay->getPaymentType()]
+        );
         $this->assertEquals($expected, $requestPayload);
     }
 }

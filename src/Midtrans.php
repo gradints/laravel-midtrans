@@ -89,7 +89,7 @@ class Midtrans
 
     public function generateRequestPayloadForApi(PaymentMethod $paymentMethod): array
     {
-        return [
+        $payload = [
             // set transaction_details, https://api-docs.midtrans.com/?php#transaction-details-object
             'transaction_details' => [
                 'order_id' => $this->transaction->getOrderId(),
@@ -111,8 +111,13 @@ class Midtrans
                 'unit' => config('midtrans.expiry.duration_unit'),
             ],
             'payment_type' => $paymentMethod->getPaymentType(),
-            $paymentMethod->getPaymentType() => $paymentMethod->getPaymentPayload(),
         ];
+
+        if (count($paymentMethod->getPaymentPayload())) {
+            $payload[$paymentMethod->getPaymentType()] = $paymentMethod->getPaymentPayload();
+        }
+
+        return $payload;
     }
 
     public function createSnapTransaction(): object
