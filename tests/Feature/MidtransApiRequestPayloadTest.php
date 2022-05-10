@@ -65,7 +65,7 @@ class MidtransApiRequestPayloadTest extends TestCase
 
         $permata = new PermataBank();
         $requestPayload = $midtrans->generateRequestPayloadForApi($permata);
-        $expected =[
+        $expected = [
             'transaction_details' => [
                 'order_id' => $orderId,
                 'gross_amount' => $grossAmount,
@@ -139,7 +139,7 @@ class MidtransApiRequestPayloadTest extends TestCase
 
         $UOBEzPay = new UOBEzPay();
         $requestPayload = $midtrans->generateRequestPayloadForApi($UOBEzPay);
-        $expected =[
+        $expected = [
             'transaction_details' => [
                 'order_id' => $orderId,
                 'gross_amount' => $grossAmount,
