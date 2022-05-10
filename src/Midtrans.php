@@ -89,35 +89,32 @@ class Midtrans
 
     public function generateRequestPayloadForApi(PaymentMethod $paymentMethod): array
     {
-        $payload = [
-            // set transaction_details, https://api-docs.midtrans.com/?php#transaction-details-object
-            'transaction_details' => [
-                'order_id' => $this->transaction->getOrderId(),
-                'gross_amount' => $this->transaction->getGrossAmount(),
-            ],
-            // set item_details, https://api-docs.midtrans.com/?php#item-details-object
-            'item_details' => $this->transaction->getItems(),
-            // set customer_details, https://api-docs.midtrans.com/?php#customer-details-object
-            'customer_details' => array_filter([
-                'firstName' => $this->customer->getFirstName(),
-                'lastName' => $this->customer->getLastName(),
-                'email' => $this->customer->getEmail(),
-                'billing_address' => $this->customer->getBillingAddress(),
-                'shipping_address' => $this->customer->getShippingAddress(),
-            ]),
-            // set expiry, https://api-docs.midtrans.com/?php#custom-expiry-object
-            'custom_expiry' => [
-                'expiry_duration' => config('midtrans.expiry.duration'),
-                'unit' => config('midtrans.expiry.duration_unit'),
-            ],
-            'payment_type' => $paymentMethod->getPaymentType(),
-        ];
-
-        if (count($paymentMethod->getPaymentPayload())) {
-            $payload[$paymentMethod->getPaymentType()] = $paymentMethod->getPaymentPayload();
-        }
-
-        return $payload;
+        return array_filter(
+            [
+                // set transaction_details, https://api-docs.midtrans.com/?php#transaction-details-object
+                'transaction_details' => [
+                    'order_id' => $this->transaction->getOrderId(),
+                    'gross_amount' => $this->transaction->getGrossAmount(),
+                ],
+                // set item_details, https://api-docs.midtrans.com/?php#item-details-object
+                'item_details' => $this->transaction->getItems(),
+                // set customer_details, https://api-docs.midtrans.com/?php#customer-details-object
+                'customer_details' => array_filter([
+                    'firstName' => $this->customer->getFirstName(),
+                    'lastName' => $this->customer->getLastName(),
+                    'email' => $this->customer->getEmail(),
+                    'billing_address' => $this->customer->getBillingAddress(),
+                    'shipping_address' => $this->customer->getShippingAddress(),
+                ]),
+                // set expiry, https://api-docs.midtrans.com/?php#custom-expiry-object
+                'custom_expiry' => [
+                    'expiry_duration' => config('midtrans.expiry.duration'),
+                    'unit' => config('midtrans.expiry.duration_unit'),
+                ],
+                'payment_type' => $paymentMethod->getPaymentType(),
+                $paymentMethod->getPaymentType() => $paymentMethod->getPaymentPayload(),
+            ]
+        );
     }
 
     public function createSnapTransaction(): object
