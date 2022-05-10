@@ -11,8 +11,8 @@ class UOBEzPay extends PaymentMethod
         return 'uob_ezpay';
     }
 
-    public function getPaymentPayload(): array
+    public function getPaymentPayload(): ?array
     {
-        return [];
+        return null;
     }
 }
