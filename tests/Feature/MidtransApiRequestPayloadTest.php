@@ -63,22 +63,18 @@ class MidtransApiRequestPayloadTest extends TestCase
         $midtrans->getCustomer()->setBillingAddress($billingAddress);
         $midtrans->getCustomer()->setShippingAddress($shippingAddress);
 
-        $expectedTransactionDetails = [
+        $permata = new PermataBank();
+        $requestPayload = $midtrans->generateRequestPayloadForApi($permata);
+        $expected =[
             'transaction_details' => [
                 'order_id' => $orderId,
                 'gross_amount' => $grossAmount,
             ],
-        ];
-        $expectedCustomExpiry = [
             'custom_expiry' => [
                 'expiry_duration' => 1,
                 'unit' => 'day', // second, minute, hour, day],
             ],
-        ];
-        $expectedItems = [
             'item_details' => $items,
-        ];
-        $expectedCustomerDetails = [
             'customer_details' => [
                 'firstName' => $firstName,
                 'lastName' => $lastName,
@@ -86,28 +82,82 @@ class MidtransApiRequestPayloadTest extends TestCase
                 'billing_address' => $billingAddress,
                 'shipping_address' => $shippingAddress,
             ],
+            'payment_type' => $permata->getPaymentType(),
+            $permata->getPaymentType() => $permata->getPaymentPayload(),
+        ];
+        $this->assertEquals($expected, $requestPayload);
+    }
+
+    /**
+     * @test createSnapTransaction
+     * @define-env setConfigCallback
+     */
+    public function it_provides_function_to_generate_request_payload_for_api_UOB_EzPay()
+    {
+        $orderId = 'inv_19042022_02';
+        $grossAmount = 30_000;
+        $items = [
+            [
+                'id' => '1',
+                'price' => 10_000,
+                'name' => 'Pulsa Indosat Rp 10,000',
+            ],
+            [
+                'id' => '2',
+                'price' => 20_000,
+                'name' => 'Edamame',
+            ],
         ];
 
-        $permata = new PermataBank();
-        $requestPayload = $midtrans->generateRequestPayloadForApi($permata);
-        $expected = array_merge(
-            $expectedTransactionDetails,
-            $expectedCustomExpiry,
-            $expectedItems,
-            $expectedCustomerDetails,
-            ['payment_type' => $permata->getPaymentType(), $permata->getPaymentType() => $permata->getPaymentPayload()]
-        );
-        $this->assertEquals($expected, $requestPayload);
+        $firstName = 'John';
+        $lastName = 'Doe';
+        $email = 'johndoe@example.com';
+        $billingAddress = [
+            'first_name' => 'TEST',
+            'last_name' => 'Niken',
+            'phone' => '081 2233 45-07',
+            'address' => 'Sudirman',
+            'city' => 'Surabaya',
+            'postal_code' => '61271',
+            'country_code' => 'IDN',
+        ];
+        $shippingAddress = [
+            'first_name' => 'TEST',
+            'last_name' => 'Niken',
+            'phone' => '0 8128-75 7-9338',
+            'address' => 'Sudirman',
+            'city' => 'Surabaya',
+            'postal_code' => '12190',
+            'country_code' => 'IDN',
+        ];
+
+        $midtrans = new Midtrans();
+        $midtrans->setTransaction($orderId, $grossAmount, $items);
+        $midtrans->setCustomer("$firstName $lastName", $email);
+        $midtrans->getCustomer()->setBillingAddress($billingAddress);
+        $midtrans->getCustomer()->setShippingAddress($shippingAddress);
 
         $UOBEzPay = new UOBEzPay();
         $requestPayload = $midtrans->generateRequestPayloadForApi($UOBEzPay);
-        $expected = array_merge(
-            $expectedTransactionDetails,
-            $expectedCustomExpiry,
-            $expectedItems,
-            $expectedCustomerDetails,
-            ['payment_type' => $UOBEzPay->getPaymentType()]
-        );
+        $expected =[
+            'transaction_details' => [
+                'order_id' => $orderId,
+                'gross_amount' => $grossAmount,
+            ],
+            'custom_expiry' => [
+                'expiry_duration' => 1,
+                'unit' => 'day', // second, minute, hour, day],
+            ],
+            'item_details' => $items,
+            'customer_details' => [
+                'firstName' => $firstName,
+                'lastName' => $lastName,
+                'email' => $email,
+                'billing_address' => $billingAddress,
+                'shipping_address' => $shippingAddress,
+            ],
+            'payment_type' => $UOBEzPay->getPaymentType(),
+        ];
         $this->assertEquals($expected, $requestPayload);
     }
 }
