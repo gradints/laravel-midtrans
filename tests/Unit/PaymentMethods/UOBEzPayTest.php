@@ -22,6 +22,6 @@ class UOBEzPayTest extends TestCase
     public function it_provides_a_getter_for_api_payment_payload()
     {
         $uob = new UOBEzPay();
-        $this->assertEquals([], $uob->getPaymentPayload());
+        $this->assertEquals(null, $uob->getPaymentPayload());
     }
 }

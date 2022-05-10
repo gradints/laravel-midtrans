@@ -157,6 +157,7 @@ class MidtransApiRequestPayloadTest extends TestCase
                 'shipping_address' => $shippingAddress,
             ],
             'payment_type' => $UOBEzPay->getPaymentType(),
+            $UOBEzPay->getPaymentType() => $UOBEzPay->getPaymentPayload(),
         ];
         $this->assertEquals($expected, $requestPayload);
     }

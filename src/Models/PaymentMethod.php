@@ -6,5 +6,5 @@ abstract class PaymentMethod
 {
     abstract public function getPaymentType(): string;
 
-    abstract public function getPaymentPayload(): array;
+    abstract public function getPaymentPayload(): ?array;
 }
