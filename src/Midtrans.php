@@ -152,6 +152,12 @@ class Midtrans
         return MidtransCoreApi::charge($payload);
     }
 
+    public function cancelTransaction(string $id): object
+    {
+        // https://api-docs.midtrans.com/#cancel-transaction
+        return MidtransTransaction::cancel($id);
+    }
+
     public function refundTransaction(string $id): object
     {
         $payload = $this->generateRequestPayloadForRefund();
