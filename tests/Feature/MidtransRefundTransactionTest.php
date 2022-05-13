@@ -23,8 +23,9 @@ class MidtransRefundTransactionTest extends TestCase
         $response = (object)[
             'status_code' => 200,
             'status_message' => 'Success, refund request is approved by the bank',
-            'transaction_id' => 'fake_id',
             'order_id' => $orderId,
+            'transaction_id' => 'fake_id',
+            'transaction_status' => 'refund',
         ];
 
         $this->mock(
