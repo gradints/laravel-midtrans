@@ -7,7 +7,6 @@ use Gradints\LaravelMidtrans\Models\Customer;
 use Gradints\LaravelMidtrans\Models\PaymentMethod;
 use Gradints\LaravelMidtrans\Models\Refund;
 use Gradints\LaravelMidtrans\Models\Transaction;
-use Midtrans\Config as MidtransConfig;
 use Midtrans\CoreApi as MidtransCoreApi;
 use Midtrans\Snap as MidtransSnap;
 use Midtrans\Transaction as MidtransTransaction;
@@ -17,17 +16,6 @@ class Midtrans
     private Customer $customer;
 
     private Transaction $transaction;
-
-    private Refund $refund;
-
-    public function __construct()
-    {
-        // https://docs.midtrans.com/en/snap/integration-guide?id=sample-request
-        MidtransConfig::$serverKey = config('midtrans.server_key');
-        MidtransConfig::$isProduction = app()->environment('production');
-        MidtransConfig::$isSanitized = config('midtrans.use_sanitizer', false);
-        MidtransConfig::$is3ds = config('midtrans.enable_3ds', false);
-    }
 
     public function setCustomer(string $name, string $email, string $phone = '')
     {
@@ -47,16 +35,6 @@ class Midtrans
     public function getTransaction(): ?Transaction
     {
         return $this->transaction ?? null;
-    }
-
-    public function setRefund(string $refundKey = null, int $amount = null, string $reason = null)
-    {
-        $this->refund = new Refund($refundKey, $amount, $reason);
-    }
-
-    public function getRefund(): ?Refund
-    {
-        return $this->refund ?? null;
     }
 
     public function getCallbackUrl(): string
@@ -129,15 +107,6 @@ class Midtrans
         ];
     }
 
-    public function generateRequestPayloadForRefund(): array
-    {
-        return [
-            'refund_key' => $this->refund->getRefundKey(),
-            'amount' => $this->refund->getAmount(),
-            'reason' => $this->refund->getReason(),
-        ];
-    }
-
     public function createSnapTransaction(): object
     {
         $payload = $this->generateRequestPayloadForSnap();
@@ -152,28 +121,35 @@ class Midtrans
         return MidtransCoreApi::charge($payload);
     }
 
-    public function cancelTransaction(string $id): object
+    public static function cancelTransaction(string $id): object
     {
         // https://api-docs.midtrans.com/#cancel-transaction
-        return MidtransTransaction::cancel($id);
+        return (object)MidtransTransaction::cancel($id);
     }
 
-    public function refundTransaction(string $id): object
-    {
-        $payload = $this->generateRequestPayloadForRefund();
+    public static function refundTransaction(
+        PaymentMethod $paymentMethod,
+        string $id,
+        string $refundKey = null,
+        int $amount,
+        string $reason,
+        string $bank = null
+    ): mixed {
+        $refund = new Refund($paymentMethod, $refundKey, $amount, $reason, $bank);
 
-        // https://api-docs.midtrans.com/#refund-transaction
-        // only support credit card
-        return MidtransTransaction::refund($id, $payload);
-    }
+        $payload = $refund->generatePayload();
 
-    public function refundDirectTransaction(string $id): object
-    {
-        $payload = $this->generateRequestPayloadForRefund();
+        if ($refund->isSupportRefund()) {
+            // TODO HANDLE WHEN RESPONSE 412
+            return MidtransTransaction::refund($id, $payload);
+        }
 
-        // https://api-docs.midtrans.com/#direct-refund-transaction
-        // only support Gopay, QRIS, ShopeePay, And Credit Card
-        return MidtransTransaction::refundDirect($id, $payload);
+        if ($refund) {
+            // TODO HANDLE WHEN RESPONSE 412
+            return MidtransTransaction::refundDirect($id, $payload);
+        }
+
+        // TODO throw InvalidRequestException
     }
 
     public static function getTransactionStatus(string $orderId): void

@@ -34,7 +34,6 @@ class MidtransCancelTransactionTest extends TestCase
             }
         );
 
-        $midtrans = new Midtrans();
-        $this->assertEquals($response, $midtrans->cancelTransaction($orderId));
+        $this->assertEquals($response, Midtrans::cancelTransaction($orderId));
     }
 }

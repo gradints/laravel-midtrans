@@ -4,7 +4,6 @@ namespace Tests\Unit;
 
 use Gradints\LaravelMidtrans\Midtrans;
 use Gradints\LaravelMidtrans\Models\Customer;
-use Gradints\LaravelMidtrans\Models\Refund;
 use Gradints\LaravelMidtrans\Models\Transaction;
 use Tests\TestCase;
 
@@ -79,22 +78,5 @@ class MidtransTest extends TestCase
 
         $midtrans->setCustomer($name, $email);
         $this->assertEquals($customer, $midtrans->getCustomer());
-    }
-
-    /**
-     * @test refund setter and getter
-     */
-    public function it_provides_a_setter_and_getter_for_refund()
-    {
-        $midtrans = new Midtrans();
-        $this->assertNull($midtrans->getRefund());
-
-        $refundKey = 'reference1';
-        $amount = 1_000_000;
-        $reason = 'Order cancel';
-        $refund = new Refund($refundKey, $amount, $reason);
-
-        $midtrans->setRefund($refundKey, $amount, $reason);
-        $this->assertEquals($refund, $midtrans->getRefund());
     }
 }
