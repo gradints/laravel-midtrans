@@ -2,29 +2,20 @@
 
 namespace Tests\Unit;
 
-use Gradints\LaravelMidtrans\Models\PaymentMethods\CreditCard;
 use Gradints\LaravelMidtrans\Models\Refund;
 use Tests\TestCase;
 
 class RefundTest extends TestCase
 {
-    public function test_a_setter_and_getter_for_payment_method()
-    {
-        $creditCard = new CreditCard();
-
-        $refund = new Refund();
-        $refund->setPaymentMethod($creditCard);
-
-        $this->assertEquals($creditCard, $refund->getPaymentMethod());
-    }
-
     public function test_a_setter_and_getter_for_refund_key()
     {
         $refundKey = 'reference1';
 
         $refund = new Refund();
-        $refund->setRefundKey($refundKey);
 
+        $this->assertNull($refund->getRefundKey());
+
+        $refund->setRefundKey($refundKey);
         $this->assertEquals($refundKey, $refund->getRefundKey());
     }
 
@@ -33,8 +24,10 @@ class RefundTest extends TestCase
         $amount = 1_000_000;
 
         $refund = new Refund();
-        $refund->setAmount($amount);
 
+        $this->assertNull($refund->getAmount());
+
+        $refund->setAmount($amount);
         $this->assertEquals($amount, $refund->getAmount());
     }
 
@@ -43,29 +36,27 @@ class RefundTest extends TestCase
         $reason = 'Cancel order';
 
         $refund = new Refund();
+
+        $this->assertNull($refund->getReason());
+
         $refund->setReason($reason);
-
         $this->assertEquals($reason, $refund->getReason());
-    }
-
-    public function test_a_setter_and_getter_for_bank()
-    {
-        $bank = 'bca';
-
-        $refund = new Refund();
-        $refund->setBank($bank);
-
-        $this->assertEquals($bank, $refund->getBank());
     }
 
     public function test_a_function_generate_payload()
     {
-        $creditCard = new CreditCard();
         $refundKey = 'reference1';
         $amount = 100_000;
         $reason = 'Order cancel';
 
-        $refund = new Refund($creditCard, $refundKey, $amount, $reason);
+        $refund = new Refund();
+        $this->assertEquals([
+            'refund_key' => null,
+            'amount' => null,
+            'reason' => null,
+        ], $refund->generatePayload());
+
+        $refund = new Refund($refundKey, $amount, $reason);
         $this->assertEquals([
             'refund_key' => $refundKey,
             'amount' => $amount,

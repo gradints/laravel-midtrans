@@ -4,8 +4,6 @@ namespace Tests\Feature;
 
 use Exception;
 use Gradints\LaravelMidtrans\Midtrans;
-use Gradints\LaravelMidtrans\Models\PaymentMethods\CreditCard;
-use Gradints\LaravelMidtrans\Models\PaymentMethods\Gopay;
 use Midtrans\Transaction as MidtransTransaction;
 use Mockery\MockInterface;
 use Tests\TestCase;
@@ -19,11 +17,9 @@ class MidtransRefundTransactionTest extends TestCase
     {
         $orderId = 'TR-2022-02-21_188';
 
-        $creditCard = new CreditCard();
         $refundKey = 'reference1';
         $amount = 100_000;
         $reason = 'Order cancel';
-        $bank = 'bni';
 
         $response = (object)[
             'status_code' => 200,
@@ -47,14 +43,7 @@ class MidtransRefundTransactionTest extends TestCase
             }
         );
 
-        $this->assertEquals($response, Midtrans::refundTransaction(
-            $creditCard,
-            $orderId,
-            $refundKey,
-            $amount,
-            $reason,
-            $bank,
-        ));
+        $this->assertEquals($response, Midtrans::refundTransaction($orderId, $refundKey, $amount, $reason));
     }
 
     /**
@@ -64,7 +53,6 @@ class MidtransRefundTransactionTest extends TestCase
     {
         $orderId = 'TR-2022-02-21_188';
 
-        $gopay = new Gopay();
         $refundKey = 'reference1';
         $amount = 100_000;
         $reason = 'Order cancel';
@@ -93,13 +81,7 @@ class MidtransRefundTransactionTest extends TestCase
             }
         );
 
-        $this->assertEquals($response, Midtrans::refundTransaction(
-            $gopay,
-            $orderId,
-            $refundKey,
-            $amount,
-            $reason,
-        ));
+        $this->assertEquals($response, Midtrans::refundTransaction($orderId, $refundKey, $amount, $reason));
     }
 
     /**
@@ -109,7 +91,6 @@ class MidtransRefundTransactionTest extends TestCase
     {
         $orderId = 'TR-2022-02-21_188';
 
-        $gopay = new Gopay();
         $refundKey = 'reference1';
         $amount = 100_000;
         $reason = 'Order cancel';
@@ -145,12 +126,6 @@ class MidtransRefundTransactionTest extends TestCase
             }
         );
 
-        $this->assertEquals($response, Midtrans::refundTransaction(
-            $gopay,
-            $orderId,
-            $refundKey,
-            $amount,
-            $reason,
-        ));
+        $this->assertEquals($response, Midtrans::refundTransaction($orderId, $refundKey, $amount, $reason));
     }
 }

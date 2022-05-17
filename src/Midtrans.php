@@ -128,15 +128,9 @@ class Midtrans
         return (object)MidtransTransaction::cancel($orderId);
     }
 
-    public static function refundTransaction(
-        PaymentMethod $paymentMethod,
-        string $orderId,
-        string $refundKey = null,
-        int $amount,
-        string $reason,
-        string $bank = null
-    ): mixed {
-        $refund = new Refund($paymentMethod, $refundKey, $amount, $reason, $bank);
+    public static function refundTransaction(string $orderId, string $refundKey = null, int $amount, string $reason): object
+    {
+        $refund = new Refund($refundKey, $amount, $reason);
 
         $payload = $refund->generatePayload();
 
