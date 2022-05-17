@@ -1,5 +1,5 @@
 {
-    "version": "0.0.4",
+    "version": "0.1.0",
     "name": "gradints/laravel-midtrans",
     "description": "Integrate Midtrans payment gateway to Laravel project.",
     "keywords": [
