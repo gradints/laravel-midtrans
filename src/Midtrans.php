@@ -2,6 +2,7 @@
 
 namespace Gradints\LaravelMidtrans;
 
+use Exception;
 use Gradints\LaravelMidtrans\Enums\TransactionStatus;
 use Gradints\LaravelMidtrans\Models\Customer;
 use Gradints\LaravelMidtrans\Models\PaymentMethod;
@@ -139,17 +140,16 @@ class Midtrans
 
         $payload = $refund->generatePayload();
 
-        if ($refund->isSupportRefund()) {
-            // TODO HANDLE WHEN RESPONSE 412
-            return MidtransTransaction::refund($id, $payload);
+        try {
+            $response = (object)MidtransTransaction::refundDirect($id, $payload);
+            return $response;
+        } catch (Exception $errors) {
         }
 
-        if ($refund) {
-            // TODO HANDLE WHEN RESPONSE 412
-            return MidtransTransaction::refundDirect($id, $payload);
-        }
+        $response = (object)MidtransTransaction::refund($id, $payload);
+        return $response;
 
-        // TODO throw InvalidRequestException
+        // TODO when failed all callback API, add InvalidRequestException
     }
 
     public static function getTransactionStatus(string $orderId): void

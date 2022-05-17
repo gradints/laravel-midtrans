@@ -76,42 +76,4 @@ class Refund
             'reason' => $this->getReason(),
         ];
     }
-
-    // https://api-docs.midtrans.com/#refund-transaction
-    public function isSupportRefund(): bool
-    {
-        if (!($this->paymentMethod instanceof CreditCard)) {
-            return false;
-        }
-
-        if (!in_array($this->bank, ['bni', 'mandiri', 'cimb'])) {
-            return false;
-        }
-
-        return true;
-    }
-
-    // https://api-docs.midtrans.com/#direct-refund-transaction
-    public function isSupportRefundDirect(): bool
-    {
-        if ($this->paymentMethod instanceof CreditCard) {
-            if (in_array($this->bank, ['bca', 'maybank', 'bri'])) {
-                return true;
-            }
-        }
-
-        if ($this->paymentMethod instanceof Gopay) {
-            return true;
-        }
-
-        if ($this->paymentMethod instanceof ShopeePay) {
-            return true;
-        }
-
-        if ($this->paymentMethod instanceof Qris) {
-            return true;
-        }
-
-        return false;
-    }
 }
