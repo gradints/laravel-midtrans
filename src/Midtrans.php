@@ -122,15 +122,15 @@ class Midtrans
         return MidtransCoreApi::charge($payload);
     }
 
-    public static function cancelTransaction(string $id): object
+    public static function cancelTransaction(string $orderId): object
     {
         // https://api-docs.midtrans.com/#cancel-transaction
-        return (object)MidtransTransaction::cancel($id);
+        return (object)MidtransTransaction::cancel($orderId);
     }
 
     public static function refundTransaction(
         PaymentMethod $paymentMethod,
-        string $id,
+        string $orderId,
         string $refundKey = null,
         int $amount,
         string $reason,
@@ -141,12 +141,12 @@ class Midtrans
         $payload = $refund->generatePayload();
 
         try {
-            $response = (object)MidtransTransaction::refundDirect($id, $payload);
+            $response = (object)MidtransTransaction::refundDirect($orderId, $payload);
             return $response;
         } catch (Exception $errors) {
         }
 
-        $response = (object)MidtransTransaction::refund($id, $payload);
+        $response = (object)MidtransTransaction::refund($orderId, $payload);
         return $response;
 
         // TODO when failed all callback API, add InvalidRequestException
