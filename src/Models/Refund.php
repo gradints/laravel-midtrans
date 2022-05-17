@@ -2,11 +2,6 @@
 
 namespace Gradints\LaravelMidtrans\Models;
 
-use Gradints\LaravelMidtrans\Models\PaymentMethods\CreditCard;
-use Gradints\LaravelMidtrans\Models\PaymentMethods\Gopay;
-use Gradints\LaravelMidtrans\Models\PaymentMethods\Qris;
-use Gradints\LaravelMidtrans\Models\PaymentMethods\ShopeePay;
-
 class Refund
 {
     public function __construct(
