@@ -2,28 +2,21 @@
 
 namespace Gradints\LaravelMidtrans;
 
+use Exception;
 use Gradints\LaravelMidtrans\Enums\TransactionStatus;
 use Gradints\LaravelMidtrans\Models\Customer;
 use Gradints\LaravelMidtrans\Models\PaymentMethod;
+use Gradints\LaravelMidtrans\Models\Refund;
 use Gradints\LaravelMidtrans\Models\Transaction;
-use Midtrans\Config as MidtransConfig;
 use Midtrans\CoreApi as MidtransCoreApi;
 use Midtrans\Snap as MidtransSnap;
+use Midtrans\Transaction as MidtransTransaction;
 
 class Midtrans
 {
     private Customer $customer;
 
     private Transaction $transaction;
-
-    public function __construct()
-    {
-        // https://docs.midtrans.com/en/snap/integration-guide?id=sample-request
-        MidtransConfig::$serverKey = config('midtrans.server_key');
-        MidtransConfig::$isProduction = app()->environment('production');
-        MidtransConfig::$isSanitized = config('midtrans.use_sanitizer', false);
-        MidtransConfig::$is3ds = config('midtrans.enable_3ds', false);
-    }
 
     public function setCustomer(string $name, string $email, string $phone = '')
     {
@@ -127,6 +120,30 @@ class Midtrans
         $payload = $this->generateRequestPayloadForApi($paymentMethod);
 
         return MidtransCoreApi::charge($payload);
+    }
+
+    public static function cancelTransaction(string $orderId): object
+    {
+        // https://api-docs.midtrans.com/#cancel-transaction
+        return (object)MidtransTransaction::cancel($orderId);
+    }
+
+    public static function refundTransaction(string $orderId, string $refundKey = null, int $amount, string $reason): object
+    {
+        $refund = new Refund($refundKey, $amount, $reason);
+
+        $payload = $refund->generatePayload();
+
+        try {
+            $response = (object)MidtransTransaction::refundDirect($orderId, $payload);
+            return $response;
+        } catch (Exception $errors) {
+        }
+
+        $response = (object)MidtransTransaction::refund($orderId, $payload);
+        return $response;
+
+        // TODO when failed all callback API, add InvalidRequestException
     }
 
     public static function getTransactionStatus(string $orderId): void
