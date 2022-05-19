@@ -4,18 +4,20 @@ namespace Gradints\LaravelMidtrans\Models\PaymentMethods;
 
 use Gradints\LaravelMidtrans\Models\PaymentMethod;
 
-class Qris extends PaymentMethod
+class QRIS extends PaymentMethod
 {
-    /**
-     * Possible values are airpay, shopee, gopay.
-     */
-    public function __construct(private string $acquirer = '')
+    public function __construct(private string $acquirer = 'gopay')
     {
     }
 
     public function setAcquirer(string $acquirer): void
     {
         $this->acquirer = $acquirer;
+    }
+
+    public function getAcquirer(): string
+    {
+        return $this->acquirer;
     }
 
     public function getPaymentType(): string
@@ -26,7 +28,7 @@ class Qris extends PaymentMethod
     public function getPaymentPayload(): array
     {
         return [
-            'acquirer' => $this->acquirer,
+            'acquirer' => $this->getAcquirer(),
         ];
     }
 }
