@@ -17,11 +17,6 @@ class Alfamart extends PaymentMethod
         $this->alfamartFreeText3 = $texts[2] ?? '';
     }
 
-    public function getAlfamartFreeText(): array
-    {
-        return [];
-    }
-
     public function getPaymentType(): string
     {
         return 'cstore';
