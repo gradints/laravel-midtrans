@@ -78,8 +78,14 @@ class CreditCardTest extends TestCase
     public function it_provides_getter_for_save_token_id()
     {
         $creditCard = new CreditCard();
-        $creditCard->setSaveTokenId(true);
+        $creditCard->saveTokenId();
 
+        $this->assertTrue($creditCard->getSaveTokenId()); // default true
+
+        $creditCard->dontSaveTokenId();
+        $this->assertNotTrue($creditCard->getSaveTokenId());
+
+        $creditCard->saveTokenId();
         $this->assertTrue($creditCard->getSaveTokenId());
     }
 
@@ -91,13 +97,10 @@ class CreditCardTest extends TestCase
     {
         $tokenId = '4811117d16c884-2cc7-4624-b0a8-10273b7f6cc8';
         $creditCard = new CreditCard($tokenId);
-        $this->assertEquals(['token_id' => $tokenId], $creditCard->getPaymentPayload());
-
         $creditCard->setBank('BNI');
         $creditCard->setInstallmentTerm(6);
         $creditCard->setBins(4811, 5233);
         $creditCard->setType('authorize');
-        $creditCard->setSaveTokenId(true);
 
         $this->assertEquals([
             'token_id' => $tokenId,

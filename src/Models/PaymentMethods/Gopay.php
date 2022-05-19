@@ -8,9 +8,14 @@ class Gopay extends PaymentMethod
 {
     private bool $enableCallback = false;
 
-    public function setEnableCallback(bool $enableCallback): void
+    public function enableCallback(): void
     {
-        $this->enableCallback = $enableCallback;
+        $this->enableCallback = true;
+    }
+
+    public function dontEnableCallback(): void
+    {
+        $this->enableCallback = false;
     }
 
     public function getEnableCallback(): bool

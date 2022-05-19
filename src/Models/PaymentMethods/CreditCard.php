@@ -10,7 +10,7 @@ class CreditCard extends PaymentMethod
     private int $installmentTerm = 0;
     private array $bins = [];
     private string $type = '';
-    private bool $saveTokenId = false;
+    private bool $saveTokenId = true; // enable
 
     public function __construct(private string $tokenId = '')
     {
@@ -66,9 +66,14 @@ class CreditCard extends PaymentMethod
         return $this->type;
     }
 
-    public function setSaveTokenId(bool $saveTokenId): void
+    public function saveTokenId(): void
     {
-        $this->saveTokenId = $saveTokenId;
+        $this->saveTokenId = true;
+    }
+
+    public function dontSaveTokenId(): void
+    {
+        $this->saveTokenId = false;
     }
 
     public function getSaveTokenId(): bool

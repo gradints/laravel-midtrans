@@ -10,13 +10,16 @@ class GopayTest extends TestCase
     /**
      * @test getEnableCallback
      */
-    public function it_provides_a_getter_for_enabled_callback()
+    public function it_provides_a_setter_and_getter_for_enabled_callback()
     {
         $gopay = new Gopay();
         $this->assertNotTrue($gopay->getEnableCallback());
 
-        $gopay->setEnableCallback(true);
+        $gopay->enableCallback();
         $this->assertTrue($gopay->getEnableCallback());
+
+        $gopay->dontEnableCallback();
+        $this->assertNotTrue($gopay->getEnableCallback());
     }
 
     /**
@@ -34,7 +37,7 @@ class GopayTest extends TestCase
     public function it_provides_a_getter_for_api_payment_payload()
     {
         $gopay = new Gopay();
-        $gopay->setEnableCallback(true);
+        $gopay->enableCallback();
         $this->assertEquals([
             'enable_callback' => true,
         ], $gopay->getPaymentPayload());
