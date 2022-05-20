@@ -76,13 +76,13 @@ class MidtransHelpers
     private static function getErrorMessage(int $code): string
     {
         switch ($code) {
-            case 400: return __('Validation error.');
+            case 400: return __('Invalid payment info.');
             case 401: return __('Access denied. Please check Client Key or Server Key.');
             case 402: return __('Payment channel is not activated.');
             case 403: return __('The requested resource is not capable of generating content in the format specified in the request headers.');
             case 404: return __('The requested resource/transaction is not found. Please check order_id or other details sent in the request.');
             case 405: return __('HTTP method is not allowed.');
-            case 406: return __('The requested resource/transaction is not found. Please check order_id or other details sent in the request.');
+            case 406: return __('Duplicate order ID.');
             case 407: return __('Transaction expired.');
             case 408: return __('Wrong data type.');
             case 409: return __('You have sent too many transactions for the same card number.');
@@ -91,7 +91,7 @@ class MidtransHelpers
             case 412: return __('You cannot modify status of the transaction.');
             case 413: return __('The request cannot be processed due to syntax error in the request body.');
             case 414: return __('Refund request is rejected due to merchant insufficient funds.');
-            case 429: return __('API rate limit exceeded. The global rate limit is applied to Create Pay Account API and Charge API');
+            case 429: return __('API rate limit exceeded.');
             case 500: return __('Internal Server Error.');
             case 501: return __('The feature is not available.');
             case 502: return __('Internal Server Error: Bank Connection Problem.');
