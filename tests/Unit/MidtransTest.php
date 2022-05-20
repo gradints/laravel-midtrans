@@ -2,9 +2,12 @@
 
 namespace Tests\Unit;
 
+use Exception;
 use Gradints\LaravelMidtrans\Midtrans;
 use Gradints\LaravelMidtrans\Models\Customer;
+use Gradints\LaravelMidtrans\Models\PaymentMethods\PermataBank;
 use Gradints\LaravelMidtrans\Models\Transaction;
+use Midtrans\CoreApi;
 use Tests\TestCase;
 
 class MidtransTest extends TestCase
@@ -78,5 +81,28 @@ class MidtransTest extends TestCase
 
         $midtrans->setCustomer($name, $email);
         $this->assertEquals($customer, $midtrans->getCustomer());
+    }
+
+    /**
+     * @test createApiTransaction
+     */
+    public function it_wraps_core_api_with_try_catch_and_return_translated_error_message()
+    {
+        $mock = $this->mock('alias:' . CoreApi::class);
+        $mock->shouldReceive('charge')->andThrow(
+            Exception::class,
+            '',
+            400
+        );
+
+        $method = new PermataBank();
+        $midtrans = new Midtrans();
+        $midtrans->setTransaction('TR-001', 20_000);
+        $midtrans->setCustomer('Name', 'email@example.test');
+
+        $this->expectException(\Illuminate\Validation\ValidationException::class);
+        $this->expectExceptionMessage(__('Validation error.'));
+
+        $midtrans->createApiTransaction($method);
     }
 }

@@ -117,9 +117,11 @@ class Midtrans
 
     public function createApiTransaction(PaymentMethod $paymentMethod): object
     {
-        $payload = $this->generateRequestPayloadForApi($paymentMethod);
+        return MidtransHelpers::tryCatch(function () use ($paymentMethod) {
+            $payload = $this->generateRequestPayloadForApi($paymentMethod);
 
-        return MidtransCoreApi::charge($payload);
+            return MidtransCoreApi::charge($payload);
+        });
     }
 
     public static function cancelTransaction(string $orderId): object
