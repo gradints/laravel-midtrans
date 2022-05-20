@@ -17,15 +17,36 @@ class CreditCardTest extends TestCase
     }
 
     /**
-     * @test getTokenId function should return token id
+     * @test constructor can set token id, and has setter and getter for token id
      */
-    public function it_provides_a_getter_for_token_id()
+    public function it_provides_a_setter_and_getter_for_token_id()
     {
         $tokenId = '4811117d16c884-2cc7-4624-b0a8-10273b7f6cc8';
-        $creditCard = new CreditCard();
-        $creditCard->setTokenId($tokenId);
+        $creditCard = new CreditCard($tokenId);
 
         $this->assertEquals($tokenId, $creditCard->getTokenId());
+
+        $newTokenid = '441111-1118-28d2b436-f679-4f5d-8656-f652be7f5911';
+        $creditCard->setTokenId($newTokenid);
+        $this->assertEquals($newTokenid, $creditCard->getTokenId());
+    }
+
+    /**
+     * @test 3ds is disabled by default which mean authentication is false,
+     * enable3ds should change authentication to true,
+     * and disable3ds should change authentication to false.
+     */
+    public function it_provides_a_setter_to_enable_3ds()
+    {
+        $tokenId = '4811117d16c884-2cc7-4624-b0a8-10273b7f6cc8';
+        $creditCard = new CreditCard($tokenId);
+        $this->assertArrayNotHasKey('authentication', $creditCard->getPaymentPayload());
+
+        $creditCard->enable3ds();
+        $this->assertTrue($creditCard->getPaymentPayload()['authentication']);
+
+        $creditCard->disable3ds();
+        $this->assertArrayNotHasKey('authentication', $creditCard->getPaymentPayload());
     }
 
     /**

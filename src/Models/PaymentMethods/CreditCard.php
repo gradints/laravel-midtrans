@@ -7,6 +7,7 @@ use Gradints\LaravelMidtrans\Models\PaymentMethod;
 class CreditCard extends PaymentMethod
 {
     private string $bank = '';
+    private bool $authentication = false;
     private int $installmentTerm = 0;
     private array $bins = [];
     private string $type = '';
@@ -24,6 +25,16 @@ class CreditCard extends PaymentMethod
     public function getTokenId(): string
     {
         return $this->tokenId;
+    }
+
+    public function enable3ds(): void
+    {
+        $this->authentication = true;
+    }
+
+    public function disable3ds(): void
+    {
+        $this->authentication = false;
     }
 
     public function setBank(string $bank): void
@@ -96,6 +107,7 @@ class CreditCard extends PaymentMethod
             'bins' => $this->bins,
             'type' => $this->type,
             'save_token_id' => $this->saveTokenId,
+            'authentication' => $this->authentication,
             // TODO low priority 'bank' Valid values are: mandiri, bni, cimb, bca, maybank, and bri.
             // TODO low priority 'bins' List of credit card's BIN (Bank Identification Number) that is allowed for transaction.
             // TODO low priority 'type' Used as preauthorization feature. Valid value: authorize.
