@@ -3,10 +3,18 @@
 namespace Tests\Unit\PaymentMethods;
 
 use Gradints\LaravelMidtrans\Models\PaymentMethods\CreditCard;
+use Illuminate\Support\Facades\Config;
 use Tests\TestCase;
 
 class CreditCardTest extends TestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+    
+        Config::set('midtrans.enable_3ds', false);
+    }
+
     /**
      * @test getPaymentType function should return 'credit_card'.
      */
@@ -32,21 +40,26 @@ class CreditCardTest extends TestCase
     }
 
     /**
-     * @test 3ds is disabled by default which mean authentication is false,
+     * @test 3ds can be set from config, constructor should enable 3ds according to config
      * enable3ds should change authentication to true,
      * and disable3ds should change authentication to false.
      */
     public function it_provides_a_setter_to_enable_3ds()
     {
         $tokenId = '4811117d16c884-2cc7-4624-b0a8-10273b7f6cc8';
+
         $creditCard = new CreditCard($tokenId);
         $this->assertArrayNotHasKey('authentication', $creditCard->getPaymentPayload());
 
-        $creditCard->enable3ds();
+        Config::set('midtrans.enable_3ds', true);
+        $creditCard = new CreditCard($tokenId);
         $this->assertTrue($creditCard->getPaymentPayload()['authentication']);
 
         $creditCard->disable3ds();
         $this->assertArrayNotHasKey('authentication', $creditCard->getPaymentPayload());
+
+        $creditCard->enable3ds();
+        $this->assertTrue($creditCard->getPaymentPayload()['authentication']);
     }
 
     /**

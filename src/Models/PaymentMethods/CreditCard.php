@@ -15,6 +15,9 @@ class CreditCard extends PaymentMethod
 
     public function __construct(private string $tokenId = '')
     {
+        if (config('midtrans.enable_3ds')) {
+            $this->enable3ds();
+        }
     }
 
     public function setTokenId(string $tokenId): void

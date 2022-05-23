@@ -101,7 +101,7 @@ class MidtransTest extends TestCase
         $midtrans->setCustomer('Name', 'email@example.test');
 
         $this->expectException(\Illuminate\Validation\ValidationException::class);
-        $this->expectExceptionMessage(__('Validation error.'));
+        $this->expectExceptionMessage(__('Invalid payment info.'));
 
         $midtrans->createApiTransaction($method);
     }

@@ -17,7 +17,7 @@ return [
     // It truncate fields that have length limit, remove not allowed characters from other fields
     'use_sanitizer' => env('MIDTRANS_USE_SANITIZER'),
 
-    //
+    // 
     'enable_3ds' => true,
 
     /*
