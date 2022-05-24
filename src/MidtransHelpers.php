@@ -62,7 +62,7 @@ class MidtransHelpers
                 $message = __('Unknown error.') . ' ' . $ex->getMessage();
             }
             throw \Illuminate\Validation\ValidationException::withMessages([
-                'payments' => [$message],
+                'payments' => [$message, $ex->getMessage()],
             ]);
         }
     }
