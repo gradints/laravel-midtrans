@@ -156,7 +156,7 @@ class Midtrans
 
         MidtransHelpers::tryCatch(function () use ($orderId) {
             $response = \Midtrans\Transaction::status($orderId);
-            self::executeActionByStatus($response['transaction_status'], $response);
+            self::executeActionByStatus(((object) $response)->transaction_status, (array) $response);
         });
 
         // TODO throw InvalidRequestException
