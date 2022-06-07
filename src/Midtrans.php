@@ -127,7 +127,9 @@ class Midtrans
     public static function cancelTransaction(string $orderId): object
     {
         // https://api-docs.midtrans.com/#cancel-transaction
-        return (object)MidtransTransaction::cancel($orderId);
+        return MidtransHelpers::tryCatch(function () use ($orderId) {
+            return (object) MidtransTransaction::cancel($orderId);
+        });
     }
 
     public static function refundTransaction(string $orderId, string $refundKey = null, int $amount, string $reason): object
@@ -137,13 +139,11 @@ class Midtrans
         $payload = $refund->generatePayload();
 
         try {
-            $response = (object)MidtransTransaction::refundDirect($orderId, $payload);
-            return $response;
+            return (object) MidtransTransaction::refundDirect($orderId, $payload);
         } catch (Exception $errors) {
         }
 
-        $response = (object)MidtransTransaction::refund($orderId, $payload);
-        return $response;
+        return (object) MidtransTransaction::refund($orderId, $payload);
 
         // TODO when failed all callback API, add InvalidRequestException
     }
@@ -154,15 +154,12 @@ class Midtrans
 
         // in https://api-docs.midtrans.com/?php#transaction-status
 
-        $response = \Midtrans\Transaction::status($orderId);
-
-        // if ($response['status_code'] !== 200) {
-        //     return;
-        // }
+        MidtransHelpers::tryCatch(function () use ($orderId) {
+            $response = \Midtrans\Transaction::status($orderId);
+            self::executeActionByStatus($response['transaction_status'], $response);
+        });
 
         // TODO throw InvalidRequestException
-
-        self::executeActionByStatus($response['transaction_status'], $response);
     }
 
     public static function executeActionByStatus(string $status, $payload): void
