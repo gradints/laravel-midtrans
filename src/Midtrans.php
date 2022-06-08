@@ -148,26 +148,21 @@ class Midtrans
         // TODO when failed all callback API, add InvalidRequestException
     }
 
-    public static function getTransactionStatus(string $orderId): void
+    public static function getTransactionStatus(string $orderId)
     {
         // TODO check fraud status
 
         // in https://api-docs.midtrans.com/?php#transaction-status
 
-        MidtransHelpers::tryCatch(function () use ($orderId) {
+        return MidtransHelpers::tryCatch(function () use ($orderId) {
             $response = \Midtrans\Transaction::status($orderId);
-            self::executeActionByStatus(((object) $response)->transaction_status, (array) $response);
+            $function = TransactionStatus::from(((object)$response)->transaction_status)->getAction();
+            if ($function) {
+                MidtransHelpers::callFunction($function, $response);
+            }
+            return $response;
         });
 
         // TODO throw InvalidRequestException
-    }
-
-    public static function executeActionByStatus(string $status, $payload): void
-    {
-        $function = TransactionStatus::from($status)->getAction();
-
-        if ($function) {
-            MidtransHelpers::callFunction($function, $payload);
-        }
     }
 }

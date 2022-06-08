@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 class MidtransGetTransactionStatusTest extends TestCase
 {
-    public function test_it_provides_getter_status_transaction_accept()
+    public function test_it_provides_getter_status_transaction_and_return_response_from_midtrans()
     {
         $orderId = 'inv_1324_4159';
         $statusCode = '200';
@@ -18,7 +18,7 @@ class MidtransGetTransactionStatusTest extends TestCase
         $input = $orderId . $statusCode . $grossAmount . $serverKey;
         $signature = openssl_digest($input, 'sha512');
 
-        $request = [
+        $response = [
             'transaction_time' => now()->subMinutes(1)->toJSON(),
             'transaction_status' => 'pending',
             'transaction_id' => '513f1f01-c9da-474c-9fc9-d5c64364b709',
@@ -45,12 +45,14 @@ class MidtransGetTransactionStatusTest extends TestCase
         $transactionMock->shouldReceive('status')
             ->once()
             ->withArgs([$orderId])
-            ->andReturn($request);
+            ->andReturn($response);
 
         $mock = $this->mock('alias:' . config('midtrans.payment_notification.pending')[0]);
-        $mock->shouldReceive('onPending')->withArgs([$request])->once();
+        $mock->shouldReceive('onPending')->withArgs([$response])->once();
 
-        Midtrans::getTransactionStatus($orderId);
+        $midtransResponse = Midtrans::getTransactionStatus($orderId);
+
+        $this->assertEquals((object) $response, (object) $midtransResponse);
     }
 
     public function test_it_doesnt_error_if_payment_notification_config_is_empty()
